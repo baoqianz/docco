@@ -527,7 +527,8 @@ class DoccoMain extends Script {
     }
   
     HighlightJS() {
-      Highlighter.registerLanguage("coffeescript",
+      Highlighter.registerLanguage(
+        "coffeescript",
         Highlighter.mLanguageMap,
         new CoffeescriptLanguage().build()
       )
