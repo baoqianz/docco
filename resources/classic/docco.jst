@@ -10,14 +10,14 @@
 <body>
   <div id="container">
     <div id="background"></div>
-    <% if (sources.length > 1) { %>
+    <% if (sources.size() > 1) { %>
       <ul id="jump_to">
         <li>
           <a class="large" href="javascript:void(0);">Jump To &hellip;</a>
           <a class="small" href="javascript:void(0);">+</a>
           <div id="jump_wrapper">
           <div id="jump_page">
-            <% for (var i=0, l=sources.length; i<l; i++) { %>
+            <% for (var i=0, l=sources.size(); i<l; i++) { %>
               <% var source = sources[i]; %>
               <a class="source" href="<%= relative(destination(source)) %>">
                 <%= path.basename(source) %>
@@ -35,17 +35,17 @@
               </div>
           </li>
         <% } %>
-        <% for (var i=0, l=sections.length; i<l; i++) { %>
+        <% for (var i=0, l=sections.size(); i<l; i++) { %>
         <% var section = sections[i]; %>
         <li id="section-<%= i + 1 %>">
             <div class="annotation">
-              <% heading = section.docsHtml.match(/^\s*<(h\d)>/) %>
-              <div class="sswrap <%= heading ? 'for-' + heading[1] : '' %>">
+              <% heading = section.docsHtml =~ /^\s*<(h\d)>/ %>
+              <div class="sswrap <%= heading ? 'for-' + heading[0][1] : '' %>">
                 <a class="ss" href="#section-<%= i + 1 %>">&#x00a7;</a>
               </div>
               <%= section.docsHtml %>
             </div>
-            <% if (section.codeText.replace(/\s/gm, '') != '') { %>
+            <% if (section.codeText.replaceAll(/\s/, '') != '') { %>
             <div class="content"><%= section.codeHtml %></div>
             <% } %>
         </li>

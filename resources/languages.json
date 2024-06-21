@@ -26,6 +26,7 @@
   ".glsl":        {"name": "glsl", "symbol": "//"},
   ".go":          {"name": "go", "symbol": "//"},
   ".groovy":      {"name": "groovy", "symbol": "//"},
+  ".gy":          {"name": "groovy", "symbol": "//"},
   ".h":           {"name": "objectivec", "symbol": "//"},
   ".hpp":         {"name": "cpp", "symbol": "//"},
   ".hrl":         {"name": "erlang", "symbol": "%"},

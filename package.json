@@ -6,27 +6,25 @@
     "docs",
     "generator",
     "literate",
-    "coffeescript"
+    "groovy"
   ],
-  "author": "Jeremy Ashkenas",
+  "author": "Zheng Baoqiang",
   "version": "0.9.1",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/jashkenas/docco.git"
+    "url": "https://github.com/baoqianz/docco.git"
   },
   "engines": {
-    "node": ">=0.2.0"
+    "java": ">=11.0.22",
+    "groovy": ">=3.0.14"
   },
   "dependencies": {
-    "commander": "~ 8.3.0",
-    "marked": "~ 4.0.3",
-    "fs-extra": "~ 10.0.0",
-    "underscore": "~ 1.13.1",
-    "highlight.js": "~ 11.3.1"
+    "org.commonmark:commonmark": "~ 0.22.0",
+    "com.deepoove:codehighlight": "~ 1.0.3"
   },
-  "main": "./docco",
+  "main": "./docco.gy",
   "bin": {
-    "docco": "./bin/docco"
+    "docco": "./bin/docco.ps1"
   }
 }

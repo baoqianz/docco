@@ -13,20 +13,20 @@
 
       <div class="header">
         <% if (hasTitle) { %>
-          <% var section = sections.shift(); %>
+          <% var section = sections.pop(); %>
           <%= section.docsHtml %>
-          <% if (!(/^\s*$/).test(section.codeText)) { %>
+          <% if (!(section.codeText ==~ /^\s*$/)) { %>
             <%= section.codeHtml %>
           <% } %>
         <% } else { %>
           <h1><%= title %></h1>
         <% } %>
 
-        <% if (sources.length > 1) { %>
+        <% if (sources.size() > 1) { %>
           <div class="toc">
             <h3>Table of Contents</h3>
             <ol>
-              <% for (var i=0, l = sources.length; i < l; i++) { %>
+              <% for (var i=0, l = sources.size(); i < l; i++) { %>
                 <% var source = sources[i]; %>
                 <li>
                   <a class="source" href="<%= relative(destination(source)) %>">
@@ -39,10 +39,10 @@
         <% } %>
       </div>
 
-      <% for (var i = 0, l = sections.length; i<l; i++) { %>
+      <% for (var i = 0, l = sections.size(); i<l; i++) { %>
         <% var section = sections[i]; %>
         <%= section.docsHtml %>
-        <% if (!(/^\s*$/).test(section.codeText)) { %>
+        <% if (!(section.codeText ==~ /^\s*$/)) { %>
           <%= section.codeHtml %>
         <% } %>
       <% } %>
