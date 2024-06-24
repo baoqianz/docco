@@ -12,20 +12,31 @@ documentation generator. For more information, see:
 
 http://ashkenas.com/docco/
 
+Prerequisite:
+
+  require Java and Groovy is installed
+
+    Java 11 and later
+
+      Microsoft Windows: choco install temurin11
+
+    Groovy 3 and later
+
+      Microsoft Windows: choco install groovy
+
 Installation:
 
-  sudo npm install -g docco
+  download the release (executable bundle) from github
 
-Usage: docco [options] FILES
+Usage: groovy docco.gy [options] files
 
-  Options:
-
-    -h, --help             output usage information
-    -V, --version          output the version number
-    -l, --layout [layout]  choose a built-in layouts (parallel, linear)
-    -c, --css [file]       use a custom css file
-    -o, --output [path]    use a custom output path
-    -t, --template [file]  use a custom .jst template
-    -e, --extension [ext]  use the given file extension for all inputs
-    -L, --languages [file] use a custom languages.json
-    -m, --marked [file]    use custom marked options
+    Options:
+     -c,--css <file>         use a custom css file
+     -e,--extension <ext>    assume a file extension for all inputs
+     -h,--help               display help for command
+     -L,--languages <file>   use a custom languages.json
+     -l,--layout <name>      choose a layout (parallel, linear or classic)
+     -m,--marked <file>      use custom marked options
+     -o,--output <path>      output to a given folder
+     -t,--template <file>    use a custom .jst template
+     -V,--version            output the version number
