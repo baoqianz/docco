@@ -716,7 +716,8 @@ class DoccoMain extends Script {
   
         def files = config.sources.collect()
   
-        def nextFile = { ->
+        def nextFile
+       	if (true) nextFile = { ->
           def source = files.pop()
           fs.readFile(source) { error, buffer ->
             if (error) return k(error)

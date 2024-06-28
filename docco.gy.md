@@ -730,7 +730,8 @@ This page is the result of running Docco against its own
       
             def files = config.sources.collect()
       
-            def nextFile = { ->
+            def nextFile
+            if (true) nextFile = { ->
               def source = files.pop()
               fs.readFile(source) { error, buffer ->
                 if (error) return k(error)
