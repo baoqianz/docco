@@ -1,9 +1,9 @@
 Docco
 =====
 
-**Docco** is a quick-and-dirty documentation generator, rewritten in
-[Groovy](https://groovy-lang.org), [which](https://github.com/jashkenas/docco)
-is originally implemented in [Literate CoffeeScript](http://coffeescript.org/#literate).
+**Docco** is a quick-and-dirty documentation generator,
+written in [Literate CoffeeScript](http://coffeescript.org/#literate),
+and ported to [Groovy](https://groovy-lang.org).
 It produces an HTML document that displays your comments intermingled with your
 code. All prose is passed through
 [Markdown](http://daringfireball.net/projects/markdown/syntax), and code is
@@ -11,6 +11,29 @@ passed through [Highlight.js](https://github.com/Sayi/Highlight.java)
 syntax highlighting.
 This page is the result of running Docco against its own
 [source file](https://github.com/baoqianz/docco/blob/master/docco.gy.md).
+
+1. Ensure that Java 11+ and Groovy 3+ are installed on your system:  
+`java -version`
+`groovy -version`
+
+2. Download the [Docco release](https://github.com/baoqianz/docco/releases/download/0.9.1/release.zip) and unzip it
+
+3. Run it against your code: `groovy docco.gy src/*.groovy`
+
+This will generate an HTML page for each of the named source files,
+with a menu linking to the other pages, saving the whole mess
+into a `docs` folder (configurable).
+
+The [Docco source](http://github.com/baoqianz/docco) is available on GitHub,
+and is released under the [Lil License](http://lillicense.org/v1.html).
+
+Docco can be used to process code written in any of
+[the supported languages](https://github.com/Sayi/Highlight.java/tree/master/src/main/java/com/codewaves/codehighlight/languages).
+If it doesn't handle your favorite yet, feel free to
+[add it to the list](https://github.com/baoqianz/docco/blob/master/resources/languages.json).
+Finally, the ["literate" style](http://coffeescript.org/#literate) of the supported languages
+are also supported — just tack an `.md` extension on the end:
+`.groovy.md`, `.py.md`, and so on.
 
     @Grapes([
       @Grab("org.commonmark:commonmark:0.22.0"),
