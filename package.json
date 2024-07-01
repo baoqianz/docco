@@ -1,0 +1,30 @@
+{
+  "name": "docco",
+  "description": "The Quick and Dirty Literate Programming Documentation Generator",
+  "keywords": [
+    "documentation",
+    "docs",
+    "generator",
+    "literate",
+    "groovy"
+  ],
+  "author": "Zheng Baoqiang",
+  "version": "0.9.1",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/baoqianz/docco.git"
+  },
+  "engines": {
+    "java": ">=11.0.22",
+    "groovy": ">=3.0.14"
+  },
+  "dependencies": {
+    "org.commonmark:commonmark": "~ 0.22.0",
+    "com.deepoove:codehighlight": "~ 1.0.3"
+  },
+  "main": "./docco.gy",
+  "bin": {
+    "docco": "./bin/docco.ps1"
+  }
+}
