@@ -722,7 +722,7 @@ class DoccoMain extends Script {
           fs.readFile(source) { error, buffer ->
             if (error) return k(error)
 
-            def code = buffer.toString()
+            def code = buffer.toString().replaceAll('\r\n', '\n')
             def sections = parse source, code, config
             format source, sections, config
             write source, sections, config

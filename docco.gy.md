@@ -759,7 +759,7 @@ are also supported — just tack an `.md` extension on the end:
               fs.readFile(source) { error, buffer ->
                 if (error) return k(error)
       
-                def code = buffer.toString()
+                def code = buffer.toString().replaceAll('\r\n', '\n')
                 def sections = parse source, code, config
                 format source, sections, config
                 write source, sections, config
