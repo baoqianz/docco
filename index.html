@@ -4,450 +4,1651 @@
 <head>
   <title>Docco</title>
   <meta http-equiv="content-type" content="text/html; charset=UTF-8">
-  <link rel="stylesheet" media="all" href="public/stylesheets/normalize.css" />
-  <link rel="stylesheet" media="all" href="resources/linear/docco.css" />
+  <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+  <link rel="stylesheet" media="all" href="resources/parallel/docco.css" />
 </head>
 <body>
-  <div class="container">
-    <div class="page">
-
-      <div class="header">
+  <div id="container">
+    <div id="background"></div>
+    
+    <ul class="sections">
         
-          
-          <h1 id="docco">Docco</h1>
-
-          
         
-
         
-      </div>
+        <li id="section-1">
+            <div class="annotation">
+              
+              <div class="sswrap for-h1">
+                <a class="ss" href="#section-1">&#x00a7;</a>
+              </div>
+              <h1>Docco</h1>
 
-      
+            </div>
+            
+        </li>
         
-        <p><strong>Docco</strong> is a quick-and-dirty documentation generator, written in
-<a href="http://coffeescript.org/#literate">Literate CoffeeScript</a>.
+        
+        <li id="section-2">
+            <div class="annotation">
+              
+              <div class="sswrap ">
+                <a class="ss" href="#section-2">&#x00a7;</a>
+              </div>
+              <p><strong>Docco</strong> is a quick-and-dirty documentation generator,
+written in <a href="http://coffeescript.org/#literate">Literate CoffeeScript</a>,
+and ported to <a href="https://groovy-lang.org">Groovy</a>.
 It produces an HTML document that displays your comments intermingled with your
 code. All prose is passed through
 <a href="http://daringfireball.net/projects/markdown/syntax">Markdown</a>, and code is
-passed through <a href="http://highlightjs.org/">Highlight.js</a> syntax highlighting.
+passed through <a href="https://github.com/Sayi/Highlight.java">Highlight.js</a>
+syntax highlighting.
 This page is the result of running Docco against its own
-<a href="https://github.com/jashkenas/docco/blob/master/docco.litcoffee">source file</a>.</p>
+<a href="https://github.com/baoqianz/docco/blob/master/docco.gy.md">source file</a>.</p>
 <ol>
-<li><p>Install Docco with <strong>npm</strong>: <code>sudo npm install -g docco</code></p>
+<li>
+<p>Make sure <a href="https://community.chocolatey.org/packages/Temurin11">Java 11</a>+
+and <a href="https://community.chocolatey.org/packages/groovy">Groovy 3</a>+
+are installed on your system<br />
+<code>java -version</code><br />
+<code>groovy -version</code></p>
 </li>
-<li><p>Run it against your code: <code>docco src/*.coffee</code></p>
+<li>
+<p>Download the <a href="https://github.com/baoqianz/docco/releases/download/0.9.1/release.zip">Docco release</a> and unzip it</p>
+</li>
+<li>
+<p>Run it against your code: <code>groovy docco.gy src/*.groovy</code></p>
 </li>
 </ol>
-<p>There is no “Step 3”. This will generate an HTML page for each of the named
-source files, with a menu linking to the other pages, saving the whole mess
+<p>This will generate an HTML page for each of the named source files,
+with a menu linking to the other pages, saving the whole mess
 into a <code>docs</code> folder (configurable).</p>
-<p>The <a href="http://github.com/jashkenas/docco">Docco source</a> is available on GitHub,
+<p>The <a href="http://github.com/baoqianz/docco">Docco source</a> is available on GitHub,
 and is released under the <a href="http://lillicense.org/v1.html">Lil License</a>.</p>
-<p>Docco can be used to process code written in any programming language. If it
-doesn’t handle your favorite yet, feel free to
-<a href="https://github.com/jashkenas/docco/blob/master/resources/languages.json">add it to the list</a>.
-Finally, the <a href="http://coffeescript.org/#literate">“literate” style</a> of <em>any</em>
-language listed in <a href="https://github.com/jashkenas/docco/blob/master/resources/languages.json">languages.json</a>
-is also supported — just tack an <code>.md</code> extension on the end:
-<code>.coffee.md</code>, <code>.py.md</code>, and so on.</p>
-<h2 id="partners-in-crime">Partners in Crime:</h2>
+<p>Docco can be used to process code written in any of
+<a href="https://github.com/Sayi/Highlight.java/tree/master/src/main/java/com/codewaves/codehighlight/languages">the supported languages</a>.
+If it doesn't enroll yet, feel free to
+<a href="https://github.com/baoqianz/docco/blob/master/resources/languages.json">add it to the list</a>.
+Finally, the <a href="http://coffeescript.org/#literate">&quot;literate&quot; style</a> of the supported languages
+are also supported — just tack an <code>.md</code> extension on the end:
+<code>.groovy.md</code>, <code>.py.md</code>, and so on.</p>
+<h2>External Dependencies</h2>
 
+            </div>
+            
+        </li>
         
-      
         
-        <ul>
-<li><p>If Node.js doesn’t run on your platform, or you’d prefer a more
-convenient package, get <a href="http://github.com/rtomayko">Ryan Tomayko</a>‘s
-<a href="http://rtomayko.github.io/rocco/rocco.html">Rocco</a>, the <strong>Ruby</strong> port that’s
-available as a gem.</p>
-</li>
-<li><p>If you’re writing shell scripts, try
-<a href="http://rtomayko.github.io/shocco/">Shocco</a>, a port for the <strong>POSIX shell</strong>,
-also by Mr. Tomayko.</p>
-</li>
-<li><p>If <strong>Python</strong> is more your speed, take a look at
-<a href="http://github.com/fitzgen">Nick Fitzgerald</a>‘s <a href="https://pycco-docs.github.io/pycco/">Pycco</a>.</p>
-</li>
-<li><p>For <strong>Clojure</strong> fans, <a href="http://blog.fogus.me/">Fogus</a>‘s
-<a href="http://fogus.me/fun/marginalia/">Marginalia</a> is a bit of a departure from
-“quick-and-dirty”, but it’ll get the job done.</p>
-</li>
-<li><p>There’s a <strong>Go</strong> port called <a href="http://nikhilm.github.io/gocco/">Gocco</a>,
-written by <a href="https://github.com/nikhilm">Nikhil Marathe</a>.</p>
-</li>
-<li><p>For all you <strong>PHP</strong> buffs out there, Fredi Bach’s
-<a href="http://jquery-jkit.com/sourcemakeup/">sourceMakeup</a> (we’ll let the faux pas
-with respect to our naming scheme slide), should do the trick nicely.</p>
-</li>
-<li><p><strong>Lua</strong> enthusiasts can get their fix with
-<a href="https://github.com/rgieseke">Robert Gieseke</a>‘s <a href="http://rgieseke.github.io/locco/">Locco</a>.</p>
-</li>
-<li><p>And if you happen to be a <strong>.NET</strong>
-aficionado, check out <a href="https://github.com/dontangg">Don Wilson</a>‘s
-<a href="http://dontangg.github.io/nocco/">Nocco</a>.</p>
-</li>
-<li><p>Going further afield from the quick-and-dirty, <a href="http://nevir.github.io/groc/">Groc</a>
-is a <strong>CoffeeScript</strong> fork of Docco that adds a searchable table of contents,
-and aims to gracefully handle large projects with complex hierarchies of code.</p>
-</li>
-<li><p>For <strong>ES6</strong> fans, <a href="https://github.com/mobily-enterprises/docco-next">Docco Next</a>
-is an expanded rewrite of Docco in modern JavaScript, thoroughly commented,
-and with the bonus that your existing templates will still work.</p>
-</li>
-</ul>
-<p>Note that not all ports support all Docco features.</p>
-<h2 id="main-documentation-generation-functions">Main Documentation Generation Functions</h2>
+        <li id="section-3">
+            <div class="annotation">
+              
+              <div class="sswrap ">
+                <a class="ss" href="#section-3">&#x00a7;</a>
+              </div>
+              
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-meta">@Grapes</span>([
+  <span class="hljs-meta">@Grab</span>(<span class="hljs-string">"org.commonmark:commonmark:0.22.0"</span>),
+  <span class="hljs-meta">@Grab</span>(<span class="hljs-string">"com.deepoove:codehighlight:1.0.3"</span>),
+])</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-4">
+            <div class="annotation">
+              
+              <div class="sswrap for-h2">
+                <a class="ss" href="#section-4">&#x00a7;</a>
+              </div>
+              <h2>Imports</h2>
 
+            </div>
+            
+        </li>
         
-      
         
-        <p>Generate the documentation for our configured source file by copying over static
+        <li id="section-5">
+            <div class="annotation">
+              
+              <div class="sswrap ">
+                <a class="ss" href="#section-5">&#x00a7;</a>
+              </div>
+              
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">import</span> com.codewaves.codehighlight.core.Highlighter
+<span class="hljs-keyword">import</span> com.codewaves.codehighlight.core.Keyword
+<span class="hljs-keyword">import</span> com.codewaves.codehighlight.core.Language
+<span class="hljs-keyword">import</span> com.codewaves.codehighlight.core.Mode
+<span class="hljs-keyword">import</span> com.codewaves.codehighlight.core.StyleRenderer
+<span class="hljs-keyword">import</span> com.codewaves.codehighlight.core.StyleRendererFactory
+<span class="hljs-keyword">import</span> com.codewaves.codehighlight.languages.LanguageBuilder
+<span class="hljs-keyword">import</span> com.codewaves.codehighlight.renderer.HtmlRenderer
+<span class="hljs-keyword">import</span> groovy.ant.AntBuilder
+<span class="hljs-keyword">import</span> groovy.cli.commons.CliBuilder
+<span class="hljs-keyword">import</span> groovy.json.JsonOutput
+<span class="hljs-keyword">import</span> groovy.json.JsonSlurper
+<span class="hljs-keyword">import</span> groovy.text.StreamingTemplateEngine
+<span class="hljs-keyword">import</span> groovy.transform.CompileStatic
+<span class="hljs-keyword">import</span> groovy.util.logging.Log
+<span class="hljs-keyword">import</span> java.lang.invoke.MethodHandles
+<span class="hljs-keyword">import</span> java.util.concurrent.CompletableFuture
+<span class="hljs-keyword">import</span> org.codehaus.groovy.runtime.DefaultGroovyMethods
+<span class="hljs-keyword">import</span> org.codehaus.groovy.runtime.InvokerHelper
+<span class="hljs-keyword">import</span> org.commonmark.parser.Parser
+<span class="hljs-keyword">import</span> org.commonmark.renderer.html.HtmlRenderer <span class="hljs-keyword">as</span> MarkdownHtmlRenderer</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-6">
+            <div class="annotation">
+              
+              <div class="sswrap for-h2">
+                <a class="ss" href="#section-6">&#x00a7;</a>
+              </div>
+              <h2>The Groovy Script &amp; Main Function</h2>
+
+            </div>
+            
+        </li>
+        
+        
+        <li id="section-7">
+            <div class="annotation">
+              
+              <div class="sswrap ">
+                <a class="ss" href="#section-7">&#x00a7;</a>
+              </div>
+              
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">DoccoMain</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">Script</span> {</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-8">
+            <div class="annotation">
+              
+              <div class="sswrap ">
+                <a class="ss" href="#section-8">&#x00a7;</a>
+              </div>
+              <p>main()</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> main(String[] args) {
+    InvokerHelper.runScript(DoccoMain.<span class="hljs-keyword">class</span>, args)
+  }
+
+  <span class="hljs-keyword">def</span> before() {
+    DefaultGroovyMethods.metaClass.<span class="hljs-keyword">static</span>.filter = <span class="hljs-string">DefaultGroovyMethods:</span>:grep
+    invokeMethod = { String name, Object[] args -&gt; DefaultGroovyMethods.<span class="hljs-string">"$name"</span>(delegate, *args) }
+    filter = invokeMethod.curry(<span class="hljs-string">"filter"</span>)
+    String[].metaClass.filter = filter
+    List.metaClass.filter = filter
+    tasks = []
+  }
+  
+  <span class="hljs-keyword">def</span> after() {
+    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">def</span> i = <span class="hljs-number">0</span>; i &lt; tasks.size(); i++) {
+      tasks[i].join()
+    }
+  }</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-9">
+            <div class="annotation">
+              
+              <div class="sswrap ">
+                <a class="ss" href="#section-9">&#x00a7;</a>
+              </div>
+              <p>Entry Point</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  <span class="hljs-keyword">def</span> run(args = args) {
+    before()
+    o = <span class="hljs-keyword">new</span> Docco(<span class="hljs-string">args:</span> args, <span class="hljs-string">tasks:</span> tasks)
+    o.run()
+    after()</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-10">
+            <div class="annotation">
+              
+              <div class="sswrap ">
+                <a class="ss" href="#section-10">&#x00a7;</a>
+              </div>
+              <p>Public API</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">this</span>.exports = [
+      <span class="hljs-string">run:</span> <span class="hljs-string">o:</span>:run,
+      <span class="hljs-string">document:</span> <span class="hljs-string">o:</span>:document,
+      <span class="hljs-string">parse:</span> <span class="hljs-string">o:</span>:parse,
+      <span class="hljs-string">format:</span> <span class="hljs-string">o:</span>:format,
+      <span class="hljs-string">version:</span> o.version,
+      <span class="hljs-string">thisScript:</span> <span class="hljs-keyword">this</span>,
+    ]
+  }</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-11">
+            <div class="annotation">
+              
+              <div class="sswrap for-h2">
+                <a class="ss" href="#section-11">&#x00a7;</a>
+              </div>
+              <h2>Code Highlight Patch</h2>
+
+            </div>
+            
+        </li>
+        
+        
+        <li id="section-12">
+            <div class="annotation">
+              
+              <div class="sswrap ">
+                <a class="ss" href="#section-12">&#x00a7;</a>
+              </div>
+              <p>ECMAScript</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  <span class="hljs-meta">@CompileStatic</span>
+  <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">ECMAScript</span> {</span>
+    <span class="hljs-keyword">static</span> <span class="hljs-keyword">final</span> String IDENT_RE = <span class="hljs-string">'[A-Za-z$_][0-9A-Za-z$_]*'</span>
+    <span class="hljs-keyword">static</span> <span class="hljs-keyword">final</span> String[] KEYWORDS = [
+      <span class="hljs-string">"as"</span>, <span class="hljs-comment">// for exports</span>
+      <span class="hljs-string">"in"</span>,
+      <span class="hljs-string">"of"</span>,
+      <span class="hljs-string">"if"</span>,
+      <span class="hljs-string">"for"</span>,
+      <span class="hljs-string">"while"</span>,
+      <span class="hljs-string">"finally"</span>,
+      <span class="hljs-string">"var"</span>,
+      <span class="hljs-string">"new"</span>,
+      <span class="hljs-string">"function"</span>,
+      <span class="hljs-string">"do"</span>,
+      <span class="hljs-string">"return"</span>,
+      <span class="hljs-string">"void"</span>,
+      <span class="hljs-string">"else"</span>,
+      <span class="hljs-string">"break"</span>,
+      <span class="hljs-string">"catch"</span>,
+      <span class="hljs-string">"instanceof"</span>,
+      <span class="hljs-string">"with"</span>,
+      <span class="hljs-string">"throw"</span>,
+      <span class="hljs-string">"case"</span>,
+      <span class="hljs-string">"default"</span>,
+      <span class="hljs-string">"try"</span>,
+      <span class="hljs-string">"switch"</span>,
+      <span class="hljs-string">"continue"</span>,
+      <span class="hljs-string">"typeof"</span>,
+      <span class="hljs-string">"delete"</span>,
+      <span class="hljs-string">"let"</span>,
+      <span class="hljs-string">"yield"</span>,
+      <span class="hljs-string">"const"</span>,
+      <span class="hljs-string">"class"</span>,
+      <span class="hljs-comment">// JS handles these with a special rule</span>
+      <span class="hljs-comment">// "get",</span>
+      <span class="hljs-comment">// "set",</span>
+      <span class="hljs-string">"debugger"</span>,
+      <span class="hljs-string">"async"</span>,
+      <span class="hljs-string">"await"</span>,
+      <span class="hljs-string">"static"</span>,
+      <span class="hljs-string">"import"</span>,
+      <span class="hljs-string">"from"</span>,
+      <span class="hljs-string">"export"</span>,
+      <span class="hljs-string">"extends"</span>
+    ]
+    <span class="hljs-keyword">static</span> <span class="hljs-keyword">final</span> String[] LITERALS = [
+      <span class="hljs-string">"true"</span>,
+      <span class="hljs-string">"false"</span>,
+      <span class="hljs-string">"null"</span>,
+      <span class="hljs-string">"undefined"</span>,
+      <span class="hljs-string">"NaN"</span>,
+      <span class="hljs-string">"Infinity"</span>
+    ]
+    <span class="hljs-keyword">static</span> <span class="hljs-keyword">final</span> String[] TYPES = [
+      <span class="hljs-comment">// Fundamental objects</span>
+      <span class="hljs-string">"Object"</span>,
+      <span class="hljs-string">"Function"</span>,
+      <span class="hljs-string">"Boolean"</span>,
+      <span class="hljs-string">"Symbol"</span>,
+      <span class="hljs-comment">// numbers and dates</span>
+      <span class="hljs-string">"Math"</span>,
+      <span class="hljs-string">"Date"</span>,
+      <span class="hljs-string">"Number"</span>,
+      <span class="hljs-string">"BigInt"</span>,
+      <span class="hljs-comment">// text</span>
+      <span class="hljs-string">"String"</span>,
+      <span class="hljs-string">"RegExp"</span>,
+      <span class="hljs-comment">// Indexed collections</span>
+      <span class="hljs-string">"Array"</span>,
+      <span class="hljs-string">"Float32Array"</span>,
+      <span class="hljs-string">"Float64Array"</span>,
+      <span class="hljs-string">"Int8Array"</span>,
+      <span class="hljs-string">"Uint8Array"</span>,
+      <span class="hljs-string">"Uint8ClampedArray"</span>,
+      <span class="hljs-string">"Int16Array"</span>,
+      <span class="hljs-string">"Int32Array"</span>,
+      <span class="hljs-string">"Uint16Array"</span>,
+      <span class="hljs-string">"Uint32Array"</span>,
+      <span class="hljs-string">"BigInt64Array"</span>,
+      <span class="hljs-string">"BigUint64Array"</span>,
+      <span class="hljs-comment">// Keyed collections</span>
+      <span class="hljs-string">"Set"</span>,
+      <span class="hljs-string">"Map"</span>,
+      <span class="hljs-string">"WeakSet"</span>,
+      <span class="hljs-string">"WeakMap"</span>,
+      <span class="hljs-comment">// Structured data</span>
+      <span class="hljs-string">"ArrayBuffer"</span>,
+      <span class="hljs-string">"SharedArrayBuffer"</span>,
+      <span class="hljs-string">"Atomics"</span>,
+      <span class="hljs-string">"DataView"</span>,
+      <span class="hljs-string">"JSON"</span>,
+      <span class="hljs-comment">// Control abstraction objects</span>
+      <span class="hljs-string">"Promise"</span>,
+      <span class="hljs-string">"Generator"</span>,
+      <span class="hljs-string">"GeneratorFunction"</span>,
+      <span class="hljs-string">"AsyncFunction"</span>,
+      <span class="hljs-comment">// Reflection</span>
+      <span class="hljs-string">"Reflect"</span>,
+      <span class="hljs-string">"Proxy"</span>,
+      <span class="hljs-comment">// Internationalization</span>
+      <span class="hljs-string">"Intl"</span>,
+      <span class="hljs-comment">// WebAssembly</span>
+      <span class="hljs-string">"WebAssembly"</span>
+    ]
+    <span class="hljs-keyword">static</span> <span class="hljs-keyword">final</span> String[] ERROR_TYPES = [
+      <span class="hljs-string">"Error"</span>,
+      <span class="hljs-string">"EvalError"</span>,
+      <span class="hljs-string">"InternalError"</span>,
+      <span class="hljs-string">"RangeError"</span>,
+      <span class="hljs-string">"ReferenceError"</span>,
+      <span class="hljs-string">"SyntaxError"</span>,
+      <span class="hljs-string">"TypeError"</span>,
+      <span class="hljs-string">"URIError"</span>
+    ]
+    <span class="hljs-keyword">static</span> <span class="hljs-keyword">final</span> String[] BUILT_IN_GLOBALS = [
+      <span class="hljs-string">"setInterval"</span>,
+      <span class="hljs-string">"setTimeout"</span>,
+      <span class="hljs-string">"clearInterval"</span>,
+      <span class="hljs-string">"clearTimeout"</span>,
+    
+      <span class="hljs-string">"require"</span>,
+      <span class="hljs-string">"exports"</span>,
+    
+      <span class="hljs-string">"eval"</span>,
+      <span class="hljs-string">"isFinite"</span>,
+      <span class="hljs-string">"isNaN"</span>,
+      <span class="hljs-string">"parseFloat"</span>,
+      <span class="hljs-string">"parseInt"</span>,
+      <span class="hljs-string">"decodeURI"</span>,
+      <span class="hljs-string">"decodeURIComponent"</span>,
+      <span class="hljs-string">"encodeURI"</span>,
+      <span class="hljs-string">"encodeURIComponent"</span>,
+      <span class="hljs-string">"escape"</span>,
+      <span class="hljs-string">"unescape"</span>
+    ]
+    <span class="hljs-keyword">static</span> <span class="hljs-keyword">final</span> String[] BUILT_IN_VARIABLES = [
+      <span class="hljs-string">"arguments"</span>,
+      <span class="hljs-string">"this"</span>,
+      <span class="hljs-string">"super"</span>,
+      <span class="hljs-string">"console"</span>,
+      <span class="hljs-string">"window"</span>,
+      <span class="hljs-string">"document"</span>,
+      <span class="hljs-string">"localStorage"</span>,
+      <span class="hljs-string">"sessionStorage"</span>,
+      <span class="hljs-string">"module"</span>,
+      <span class="hljs-string">"global"</span> <span class="hljs-comment">// Node.js</span>
+    ]
+    <span class="hljs-keyword">static</span> <span class="hljs-keyword">final</span> String[] BUILT_INS =
+      BUILT_IN_GLOBALS +
+      TYPES +
+      ERROR_TYPES
+  }</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-13">
+            <div class="annotation">
+              
+              <div class="sswrap ">
+                <a class="ss" href="#section-13">&#x00a7;</a>
+              </div>
+              <p>Coffeescript</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  <span class="hljs-meta">@CompileStatic</span>
+  <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">CoffeescriptLanguage</span> <span class="hljs-keyword">implements</span> <span class="hljs-title">LanguageBuilder</span> {</span>
+    <span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> String[] ALIASES = [<span class="hljs-string">'coffee'</span>]
+    <span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> String IDENT_RE = <span class="hljs-string">'[A-Za-z$_][0-9A-Za-z$_]*'</span>
+    <span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> String POSSIBLE_PARAMS_RE = <span class="hljs-string">'(\\(.*\\)\\s*)?\\B[-=]&gt;'</span>
+    <span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> String[] KEYWORDS_COFFEE = [
+      <span class="hljs-string">'then'</span>,
+      <span class="hljs-string">'unless'</span>,
+      <span class="hljs-string">'until'</span>,
+      <span class="hljs-string">'loop'</span>,
+      <span class="hljs-string">'by'</span>,
+      <span class="hljs-string">'when'</span>,
+      <span class="hljs-string">'and'</span>,
+      <span class="hljs-string">'or'</span>,
+      <span class="hljs-string">'is'</span>,
+      <span class="hljs-string">'isnt'</span>,
+      <span class="hljs-string">'not'</span>
+    ]
+    <span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> String[] KEYWORDS_NOT_VALID = [
+      <span class="hljs-string">"var"</span>,
+      <span class="hljs-string">"const"</span>,
+      <span class="hljs-string">"let"</span>,
+      <span class="hljs-string">"function"</span>,
+      <span class="hljs-string">"static"</span>
+    ]
+    <span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> String[] BUILT_INS = [
+      <span class="hljs-string">'npm'</span>,
+      <span class="hljs-string">'print'</span>
+    ]
+    <span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> String[] LITERALS = [
+      <span class="hljs-string">'yes'</span>,
+      <span class="hljs-string">'no'</span>,
+      <span class="hljs-string">'on'</span>,
+      <span class="hljs-string">'off'</span>
+    ]
+    <span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> Keyword[] KEYWORDS = <span class="hljs-keyword">new</span> Keyword[] {
+      <span class="hljs-keyword">new</span> Keyword(<span class="hljs-string">"keyword"</span>,  ECMAScript.KEYWORDS  + KEYWORDS_COFFEE - KEYWORDS_NOT_VALID),
+      <span class="hljs-keyword">new</span> Keyword(<span class="hljs-string">"built_in"</span>, ECMAScript.BUILT_INS + BUILT_INS),
+      <span class="hljs-keyword">new</span> Keyword(<span class="hljs-string">"literal"</span>,  ECMAScript.LITERALS  + LITERALS)
+    }
+    <span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> Mode SUBST  =
+      <span class="hljs-keyword">new</span> Mode().className(<span class="hljs-string">"subst"</span>).begin(<span class="hljs-string">"#\\{"</span>).end(<span class="hljs-string">"\\}"</span>).keywords(KEYWORDS)
+  
+    <span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> Mode NUMBER =
+      Mode.inherit(Mode.C_NUMBER_MODE, <span class="hljs-keyword">new</span> Mode().starts(<span class="hljs-keyword">new</span> Mode().end(<span class="hljs-string">"(\\s*/)?"</span>).relevance(<span class="hljs-number">0</span>)))
+  
+    <span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> Mode QUOTE_STRING =
+      <span class="hljs-keyword">new</span> Mode().className(<span class="hljs-string">"string"</span>).begin(<span class="hljs-string">'"'</span>).end(<span class="hljs-string">'"'</span>).contains(<span class="hljs-keyword">new</span> Mode[] {
+        Mode.BACKSLASH_ESCAPE,
+        SUBST,
+      })
+    <span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> Mode TRIPLE_APOS_STRING =
+      <span class="hljs-keyword">new</span> Mode().className(<span class="hljs-string">"string"</span>).begin(<span class="hljs-string">"'''"</span>).end(<span class="hljs-string">"'''"</span>).contains(<span class="hljs-keyword">new</span> Mode[] {
+        Mode.BACKSLASH_ESCAPE,
+      })
+    <span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> Mode TRIPLE_QUOTE_STRING =
+      <span class="hljs-keyword">new</span> Mode().className(<span class="hljs-string">"string"</span>).begin(<span class="hljs-string">'"""'</span>).end(<span class="hljs-string">'"""'</span>).contains(<span class="hljs-keyword">new</span> Mode[] {
+        Mode.BACKSLASH_ESCAPE,
+        SUBST,
+      })
+    <span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> Mode STRING =
+      <span class="hljs-keyword">new</span> Mode().className(<span class="hljs-string">"string"</span>).variants(<span class="hljs-keyword">new</span> Mode[] {
+        Mode.APOS_STRING_MODE,
+        QUOTE_STRING,
+        TRIPLE_APOS_STRING,
+        TRIPLE_QUOTE_STRING,
+      })
+    <span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> Mode REGEXP =
+      <span class="hljs-keyword">new</span> Mode().className(<span class="hljs-string">"regexp"</span>).variants(<span class="hljs-keyword">new</span> Mode[] {
+        <span class="hljs-keyword">new</span> Mode().begin(<span class="hljs-string">'///'</span>).end(<span class="hljs-string">'///'</span>).contains(<span class="hljs-keyword">new</span> Mode[] {
+          SUBST,
+          Mode.HASH_COMMENT_MODE,
+        }),
+        <span class="hljs-keyword">new</span> Mode().begin(<span class="hljs-string">"//[gim]{0,3}(?!\\w)"</span>).relevance(<span class="hljs-number">0</span>),
+        <span class="hljs-keyword">new</span> Mode().begin(<span class="hljs-regexp">/\/</span>(?![ *]).*?(?![\\]).\/[gim]{0,3}(?!\w)/)
+      })
+    private static Mode SUBLANG =
+      new Mode().subLanguage("javascript").excludeBegin().excludeEnd().variants(new Mode[] {
+        new Mode().begin("```").end("```"),
+        new Mode().begin("`").end("`"),
+      })
+    private static Mode[] EXPRESSIONS = new Mode[] {
+      Mode.BINARY_NUMBER_MODE,
+      NUMBER,
+      STRING,
+      REGEXP,
+      new Mode().begin("@" + IDENT_RE),
+      SUBLANG,
+    }
+    private static Mode TITLE_MODE =
+      Mode.inherit(Mode.TITLE_MODE, new Mode().begin(IDENT_RE))
+  
+    private static Mode PARAMS_MODE =
+      new Mode().className("params").begin('\\([^\\(]').returnBegin().contains(new Mode[] {
+        new Mode().begin('\\(').end('\\)').keywords(KEYWORDS).contains(EXPRESSIONS + [
+          Mode.SELF,
+        ])
+      })
+    private static Mode FUNCTION = new Mode()
+      .className("function")
+      .begin('^\\s*' + IDENT_RE + '\\s*=\\s*' + POSSIBLE_PARAMS_RE)
+      .end('[-=]&gt;')
+      .returnBegin()
+      .contains(new Mode[] {
+        TITLE_MODE,
+        PARAMS_MODE,
+      })
+    private static Mode FUNCTION_ANONYM =
+      new Mode().begin(/[:\(,=]\s*/).relevance(<span class="hljs-number">0</span>).contains(<span class="hljs-keyword">new</span> Mode[] {
+        <span class="hljs-keyword">new</span> Mode().className(<span class="hljs-string">"function"</span>).begin(POSSIBLE_PARAMS_RE).end(<span class="hljs-string">"[-=]&gt;"</span>).contains(<span class="hljs-keyword">new</span> Mode[] {
+          PARAMS_MODE,
+        }).returnBegin()
+      })
+    <span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> Mode CLASS_DEFINITION = <span class="hljs-keyword">new</span> Mode()
+      .className(<span class="hljs-string">"class"</span>)
+      .beginKeywords(<span class="hljs-keyword">new</span> Keyword[] { <span class="hljs-keyword">new</span> Keyword(<span class="hljs-string">""</span>, <span class="hljs-string">"class"</span>) })
+      .end(<span class="hljs-string">'$'</span>)
+      .illegal(<span class="hljs-regexp">/[:=${'"'}\[\]]/</span>)
+      .contains(<span class="hljs-keyword">new</span> Mode[] {
+        TITLE_MODE,
+        <span class="hljs-keyword">new</span> Mode()
+          .beginKeywords(<span class="hljs-keyword">new</span> Keyword[] { <span class="hljs-keyword">new</span> Keyword(<span class="hljs-string">""</span>, <span class="hljs-string">"extends"</span>) })
+          .endsWithParent()
+          .illegal(<span class="hljs-regexp">/[:=${'"'}\[\]]/</span>)
+          .contains(<span class="hljs-keyword">new</span> Mode[] { TITLE_MODE }),
+      })
+    <span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> Mode LABEL =
+      <span class="hljs-keyword">new</span> Mode().begin(IDENT_RE + <span class="hljs-string">":"</span>).end(<span class="hljs-string">":"</span>).returnBegin().returnEnd().relevance(<span class="hljs-number">0</span>)
+  
+    <span class="hljs-keyword">static</span> {
+      SUBST.contains(EXPRESSIONS)
+    }
+  
+    Language build() {
+      (Language) <span class="hljs-keyword">new</span> Language()
+        .aliases(ALIASES)
+        .keywords(KEYWORDS)
+        .contains(EXPRESSIONS + [
+          Mode.HASH_COMMENT_MODE,
+          Mode.COMMENT(<span class="hljs-string">'###'</span>, <span class="hljs-string">'###'</span>, <span class="hljs-literal">null</span>),
+          FUNCTION,
+          FUNCTION_ANONYM,
+          CLASS_DEFINITION,
+          LABEL,
+        ])
+        .illegal(<span class="hljs-regexp">/\/\*</span>/)
+    }
+  }</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-14">
+            <div class="annotation">
+              
+              <div class="sswrap for-h2">
+                <a class="ss" href="#section-14">&#x00a7;</a>
+              </div>
+              <h2>Set Property</h2>
+
+            </div>
+            
+        </li>
+        
+        
+        <li id="section-15">
+            <div class="annotation">
+              
+              <div class="sswrap ">
+                <a class="ss" href="#section-15">&#x00a7;</a>
+              </div>
+              
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  <span class="hljs-meta">@CompileStatic</span>
+  <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Utils</span> {</span>
+    <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> setProperty(Class clazz, obj, String property, value) {
+      <span class="hljs-keyword">def</span> field = clazz.getDeclaredField(property)
+      field.setAccessible(<span class="hljs-literal">true</span>)
+  
+      <span class="hljs-keyword">def</span> MH = MethodHandles.lookup().unreflectSetter(field)
+      obj == <span class="hljs-literal">null</span> ?
+        MH.invokeWithArguments(value) :
+        MH.invokeWithArguments(obj, value)
+    }
+  }</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-16">
+            <div class="annotation">
+              
+              <div class="sswrap for-h2">
+                <a class="ss" href="#section-16">&#x00a7;</a>
+              </div>
+              <h2>FS</h2>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">FS</span> {</span>
+    <span class="hljs-keyword">def</span> antBuilder = <span class="hljs-keyword">new</span> AntBuilder()
+  
+    <span class="hljs-keyword">def</span> mkdirs(path, k) {
+      tasks &lt;&lt; CompletableFuture.runAsync(() -&gt; {
+        <span class="hljs-keyword">new</span> File(path).mkdirs()
+      }).thenRun(() -&gt; {
+        k()
+      })
+    }
+  
+    <span class="hljs-keyword">def</span> mkdirsSync(path) {
+      <span class="hljs-keyword">new</span> File(path).mkdirs()
+    }
+  
+    <span class="hljs-keyword">def</span> copy(src, dest, k) {
+      tasks &lt;&lt; CompletableFuture.runAsync(() -&gt; {
+        <span class="hljs-keyword">new</span> File(src).isFile() ?
+        antBuilder.copy(tofile: dest, <span class="hljs-string">overwrite:</span> <span class="hljs-literal">true</span>, <span class="hljs-string">file:</span> src) :
+        antBuilder.copy(<span class="hljs-string">todir:</span>  dest, <span class="hljs-string">overwrite:</span> <span class="hljs-literal">true</span>) { fileset(<span class="hljs-string">dir:</span> src) }
+      }).handle((buffer, error) -&gt; {
+        k(error)
+      })
+    }
+  
+    <span class="hljs-keyword">def</span> readFile(path, k) {
+      tasks &lt;&lt; CompletableFuture.supplyAsync(() -&gt; {
+        <span class="hljs-keyword">new</span> File(path).withReader { reader -&gt;
+          reader.text
+        }
+      }).handle((buffer, error) -&gt; {
+        k(error, buffer)
+      })
+    }
+  
+    <span class="hljs-keyword">def</span> readFileSync(path) {
+      <span class="hljs-keyword">new</span> File(path).withReader { reader -&gt;
+        reader.text
+      }
+    }
+  
+    <span class="hljs-keyword">def</span> outputFileSync(file, data) {
+      antBuilder.concat(<span class="hljs-string">destfile:</span> file, <span class="hljs-string">encoding:</span> <span class="hljs-string">"UTF-8"</span>, <span class="hljs-string">"$data"</span>)
+    }
+  
+    <span class="hljs-keyword">def</span> existsSync(path) {
+      <span class="hljs-keyword">new</span> File(path ?: <span class="hljs-string">""</span>).exists()
+    }
+  
+    <span class="hljs-keyword">def</span> path, tasks
+  
+    FS() {
+      antBuilder.project.listeners[<span class="hljs-number">0</span>].msgOutputLevel = <span class="hljs-number">1</span>
+    }
+  }</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-17">
+            <div class="annotation">
+              
+              <div class="sswrap for-h2">
+                <a class="ss" href="#section-17">&#x00a7;</a>
+              </div>
+              <h2>Path</h2>
+
+            </div>
+            
+        </li>
+        
+        
+        <li id="section-18">
+            <div class="annotation">
+              
+              <div class="sswrap ">
+                <a class="ss" href="#section-18">&#x00a7;</a>
+              </div>
+              
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Path</span> {</span>
+    <span class="hljs-keyword">def</span> resolve(path) {
+      <span class="hljs-keyword">new</span> File(path).getAbsolutePath()
+    }
+  
+    <span class="hljs-keyword">def</span> relative(from, to) {
+      <span class="hljs-keyword">new</span> File(from).toPath().relativize(<span class="hljs-keyword">new</span> File(to).toPath()).toFile().getPath() ?: <span class="hljs-string">"."</span>
+    }
+  
+    <span class="hljs-keyword">def</span> dirname(path) {
+      <span class="hljs-keyword">def</span> path0 = <span class="hljs-keyword">new</span> File(path).getPath()
+      <span class="hljs-keyword">new</span> File(path0.substring(<span class="hljs-number">0</span>, path0.size() - basename(path0).size()) ?: <span class="hljs-string">"."</span>).getPath()
+    }
+  
+    <span class="hljs-keyword">def</span> basename(path) {
+      <span class="hljs-keyword">new</span> File(path ?: <span class="hljs-string">""</span>).getName()
+    }
+  
+    <span class="hljs-keyword">def</span> basename(path, ext) {
+      <span class="hljs-keyword">def</span> base = basename(path)
+      <span class="hljs-keyword">if</span> (ext &amp;&amp; base.endsWith(ext)) {
+        base.substring(<span class="hljs-number">0</span>, base.size() - ext.size())
+      } <span class="hljs-keyword">else</span> {
+        base
+      }
+    }
+  
+    <span class="hljs-keyword">def</span> extname(path) {
+      <span class="hljs-keyword">def</span> dot = path.lastIndexOf(<span class="hljs-string">"."</span>)
+      <span class="hljs-keyword">def</span> slash = path.lastIndexOf(<span class="hljs-string">"/"</span>)
+      <span class="hljs-keyword">def</span> backslash = path.lastIndexOf(<span class="hljs-string">"\\"</span>)
+      <span class="hljs-keyword">if</span> (backslash &gt; slash) slash = backslash
+      <span class="hljs-keyword">if</span> (dot &gt; slash + <span class="hljs-number">1</span>) {
+        path.substring(dot)
+      } <span class="hljs-keyword">else</span> {
+        <span class="hljs-string">""</span>
+      }
+    }
+  
+    <span class="hljs-keyword">def</span> join(base, sub) {
+      <span class="hljs-keyword">new</span> File(base, sub).toPath().normalize().toFile().getPath() ?: <span class="hljs-string">"."</span>
+    }
+  
+    <span class="hljs-keyword">def</span> join(String... paths) {
+      <span class="hljs-keyword">switch</span> (paths.length) {
+        <span class="hljs-keyword">case</span> <span class="hljs-number">0</span>:
+          <span class="hljs-string">"."</span>
+          <span class="hljs-keyword">break</span>
+        <span class="hljs-keyword">case</span> <span class="hljs-number">1</span>:
+          paths[<span class="hljs-number">0</span>]
+          <span class="hljs-keyword">break</span>
+        <span class="hljs-string">default:</span>
+          paths[<span class="hljs-number">1</span>] = join(paths[<span class="hljs-number">0</span>], paths[<span class="hljs-number">1</span>])
+          join(paths[<span class="hljs-number">1.</span>.<span class="hljs-number">-1</span>] <span class="hljs-keyword">as</span> String[])
+      }
+    }
+  }</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-19">
+            <div class="annotation">
+              
+              <div class="sswrap for-h2">
+                <a class="ss" href="#section-19">&#x00a7;</a>
+              </div>
+              <h2>Markdown</h2>
+
+            </div>
+            
+        </li>
+        
+        
+        <li id="section-20">
+            <div class="annotation">
+              
+              <div class="sswrap ">
+                <a class="ss" href="#section-20">&#x00a7;</a>
+              </div>
+              
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">CommonMark</span> {</span>
+    <span class="hljs-keyword">def</span> parser = Parser.builder().build()
+    <span class="hljs-keyword">def</span> renderer = MarkdownHtmlRenderer.builder().build()
+    <span class="hljs-keyword">def</span> apply(String md) {
+      renderer.render(lexer(md))
+    }
+  
+    <span class="hljs-keyword">def</span> lexer(String md) {
+      parser.parse(md)
+    }
+  
+    <span class="hljs-keyword">def</span> setOptions(HashMap options) {
+      <span class="hljs-comment">// <span class="hljs-doctag">TODO:</span> inline code block highlighting</span>
+    }
+  }</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-21">
+            <div class="annotation">
+              
+              <div class="sswrap for-h2">
+                <a class="ss" href="#section-21">&#x00a7;</a>
+              </div>
+              <h2>highlight.js</h2>
+
+            </div>
+            
+        </li>
+        
+        
+        <li id="section-22">
+            <div class="annotation">
+              
+              <div class="sswrap ">
+                <a class="ss" href="#section-22">&#x00a7;</a>
+              </div>
+              
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">HighlightJS</span> {</span>
+    <span class="hljs-keyword">def</span> highlighter = <span class="hljs-keyword">new</span> Highlighter&lt;CharSequence&gt;(<span class="hljs-keyword">new</span> RendererFactory());
+    <span class="hljs-keyword">def</span> getLanguage(String name) {
+      Highlighter.findLanguage(name)
+    }
+  
+    <span class="hljs-keyword">def</span> highlightAuto(String code, String[] languageSubset = <span class="hljs-literal">null</span>) {
+      [<span class="hljs-string">value:</span> highlighter.highlightAuto(code, languageSubset).getResult()]
+    }
+  
+    <span class="hljs-keyword">def</span> highlight(String code, HashMap options) {
+      [<span class="hljs-string">value:</span> highlighter.highlight(options.language, code).getResult()]
+    }
+  
+    <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">RendererFactory</span> <span class="hljs-keyword">implements</span> <span class="hljs-title">StyleRendererFactory</span>&lt;<span class="hljs-title">CharSequence</span>&gt; {</span>
+      StyleRenderer&lt;CharSequence&gt; create(String languageName) {
+        <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> HtmlRenderer(<span class="hljs-string">"hljs-"</span>);
+      }
+    }</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-23">
+            <div class="annotation">
+              
+              <div class="sswrap ">
+                <a class="ss" href="#section-23">&#x00a7;</a>
+              </div>
+              <p>Add support for coffeescript code highlighting</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    HighlightJS() {
+      Highlighter.registerLanguage(
+        <span class="hljs-string">"coffeescript"</span>,
+        Highlighter.mLanguageMap,
+        <span class="hljs-keyword">new</span> CoffeescriptLanguage().build()
+      )
+      Utils.setProperty(
+        Highlighter,
+        <span class="hljs-literal">null</span>,
+        <span class="hljs-string">"mLanguages"</span>,
+        (String[])(Highlighter.mLanguages + <span class="hljs-keyword">new</span> String[] { <span class="hljs-string">"coffeescript"</span> })
+      )
+    }
+  }</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-24">
+            <div class="annotation">
+              
+              <div class="sswrap for-h2">
+                <a class="ss" href="#section-24">&#x00a7;</a>
+              </div>
+              <h2>Underscore</h2>
+
+            </div>
+            
+        </li>
+        
+        
+        <li id="section-25">
+            <div class="annotation">
+              
+              <div class="sswrap ">
+                <a class="ss" href="#section-25">&#x00a7;</a>
+              </div>
+              
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Underscore</span> {</span>
+    <span class="hljs-keyword">def</span> t = <span class="hljs-keyword">new</span> StreamingTemplateEngine()
+    <span class="hljs-keyword">def</span> find(list, Closure predicate) {
+      list.find predicate
+    }
+  
+    <span class="hljs-keyword">def</span> filter(list, Closure predicate) {
+      list.findAll predicate
+    }
+  
+    <span class="hljs-keyword">def</span> extend(destination, Object[] sources) {
+      <span class="hljs-keyword">for</span> (<span class="hljs-keyword">def</span> source <span class="hljs-keyword">in</span> sources) {
+        destination += source
+      }
+      destination
+    }
+  
+    <span class="hljs-keyword">def</span> pick(HashMap object, String[] keys) {
+      object.findAll { entry -&gt; entry.key <span class="hljs-keyword">in</span> keys }
+    }
+  
+    <span class="hljs-keyword">def</span> keys(HashMap object) {
+      object.keySet() <span class="hljs-keyword">as</span> String[]
+    }
+  
+    <span class="hljs-keyword">def</span> compose(Closure[] functions) {
+      <span class="hljs-keyword">switch</span> (functions.length) {
+        <span class="hljs-keyword">case</span> <span class="hljs-number">0</span>:
+          { a -&gt; a }
+          <span class="hljs-keyword">break</span>
+        <span class="hljs-keyword">case</span> <span class="hljs-number">1</span>:
+          functions[<span class="hljs-number">0</span>]
+          <span class="hljs-keyword">break</span>
+        <span class="hljs-string">default:</span>
+          functions[<span class="hljs-number">1</span>] = functions[<span class="hljs-number">0</span>].compose functions[<span class="hljs-number">1</span>]
+          compose(functions[<span class="hljs-number">1.</span>.<span class="hljs-number">-1</span>] <span class="hljs-keyword">as</span> Closure[])
+      }
+    }
+  
+    <span class="hljs-keyword">def</span> template(templateString) {
+      t.createTemplate(templateString)::make
+    }
+  }</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-26">
+            <div class="annotation">
+              
+              <div class="sswrap for-h2">
+                <a class="ss" href="#section-26">&#x00a7;</a>
+              </div>
+              <h2>JSON</h2>
+
+            </div>
+            
+        </li>
+        
+        
+        <li id="section-27">
+            <div class="annotation">
+              
+              <div class="sswrap ">
+                <a class="ss" href="#section-27">&#x00a7;</a>
+              </div>
+              
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Json</span> {</span>
+    <span class="hljs-keyword">def</span> jsonSlurper = <span class="hljs-keyword">new</span> JsonSlurper()
+    <span class="hljs-keyword">def</span> parse(String text) {
+      jsonSlurper.parseText(text)
+    }
+  
+    <span class="hljs-keyword">def</span> stringify(object) {
+      JsonOutput.toJson(object)
+    }
+  }</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-28">
+            <div class="annotation">
+              
+              <div class="sswrap for-h2">
+                <a class="ss" href="#section-28">&#x00a7;</a>
+              </div>
+              <h2>Commander</h2>
+
+            </div>
+            
+        </li>
+        
+        
+        <li id="section-29">
+            <div class="annotation">
+              
+              <div class="sswrap ">
+                <a class="ss" href="#section-29">&#x00a7;</a>
+              </div>
+              
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Commander</span> {</span>
+    <span class="hljs-keyword">def</span> cli     = <span class="hljs-keyword">new</span> CliBuilder(<span class="hljs-string">stopAtNonOption:</span> <span class="hljs-literal">false</span>)
+    <span class="hljs-keyword">def</span> options = <span class="hljs-literal">null</span>
+  
+    <span class="hljs-keyword">def</span> getProperty(String name) {
+      name == <span class="hljs-string">"args"</span> ?
+        options.@commandLine.args :
+        options.getProperty(name)
+    }
+  
+    <span class="hljs-keyword">def</span> hasOption(String option) {
+      options.<span class="hljs-meta">@commandLine</span>.hasOption(option)
+    }
+  
+    <span class="hljs-keyword">def</span> options() {
+      _.keys(options.<span class="hljs-meta">@savedTypeOptions</span>).filter { key -&gt; key !<span class="hljs-keyword">in</span> [<span class="hljs-string">'help'</span>, <span class="hljs-string">'version'</span>]}
+    }
+  
+    <span class="hljs-keyword">def</span> opts() {
+      options().iterator().collectEntries { option -&gt; [option, <span class="hljs-keyword">this</span>.<span class="hljs-string">"$option"</span> ?: <span class="hljs-literal">null</span>] }
+    }
+  
+    <span class="hljs-keyword">def</span> version(version) {
+      cli.V(<span class="hljs-string">longOpt:</span> <span class="hljs-string">'version'</span>, <span class="hljs-string">defaultValue:</span> version, <span class="hljs-string">'output the version number'</span>)
+      <span class="hljs-keyword">this</span>
+    }
+  
+    <span class="hljs-keyword">def</span> usage(description) {
+      cli.usage  = description
+      cli.header = <span class="hljs-string">"\nOptions:"</span>
+      cli.h(<span class="hljs-string">longOpt:</span> <span class="hljs-string">'help'</span>, <span class="hljs-string">'display help for command'</span>)
+      <span class="hljs-keyword">this</span>
+    }
+  
+    <span class="hljs-keyword">def</span> option(flags, description, defaultOrConvert) {
+      <span class="hljs-keyword">def</span> optionFlags = splitFlags flags
+      <span class="hljs-keyword">def</span> argName = optionFlags.arg
+      <span class="hljs-keyword">def</span> argCount = argName ? 1 : <span class="hljs-number">-1</span>
+      <span class="hljs-keyword">def</span> variableKey = defaultOrConvert <span class="hljs-keyword">instanceof</span> Closure ? "convert" : <span class="hljs-string">"defaultValue"</span>
+      cli.<span class="hljs-string">"$optionFlags.short"</span>(
+        [ <span class="hljs-string">longOpt:</span> optionFlags.<span class="hljs-keyword">long</span>,
+          (variableKey): defaultOrConvert,
+          <span class="hljs-string">args:</span> argCount,
+          <span class="hljs-string">argName:</span> argName ],
+        description)
+      <span class="hljs-keyword">this</span>
+    }
+  
+    <span class="hljs-keyword">def</span> parse(args) {
+      options = cli.parse(args)
+      <span class="hljs-keyword">if</span> (!options || showInfo()) {
+        exit()
+      }
+      options
+    }
+  
+    <span class="hljs-keyword">def</span> usage() {
+      cli.usage()
+    }
+  
+    <span class="hljs-keyword">def</span> splitFlags(flags) {
+      <span class="hljs-keyword">def</span> match = flags =~ <span class="hljs-regexp">/.*?-([a-zA-Z])\b.+?--(\w{2,})(\W+([\w\s]+)\b)*.*/</span>
+      <span class="hljs-keyword">def</span> shortFlag = match[<span class="hljs-number">0</span>][<span class="hljs-number">1</span>]
+      <span class="hljs-keyword">def</span> longFlag = match[<span class="hljs-number">0</span>][<span class="hljs-number">2</span>]
+      <span class="hljs-keyword">def</span> argName = match[<span class="hljs-number">0</span>][<span class="hljs-number">4</span>]
+      [<span class="hljs-string">short:</span> shortFlag, <span class="hljs-string">long:</span> longFlag, <span class="hljs-string">arg:</span> argName]
+    }
+  
+    <span class="hljs-keyword">def</span> showInfo() {
+      <span class="hljs-keyword">if</span> (hasOption(<span class="hljs-string">"--help"</span>)) {
+        usage()
+        <span class="hljs-literal">true</span>
+      } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (hasOption(<span class="hljs-string">"--version"</span>)) {
+        version()
+        <span class="hljs-literal">true</span>
+      }
+    }
+  
+    <span class="hljs-keyword">def</span> version() {
+      println(version)
+    }
+  
+    <span class="hljs-keyword">def</span> exit() {
+      System.exit(<span class="hljs-number">0</span>)
+    }
+  
+    <span class="hljs-keyword">def</span> _
+  }</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-30">
+            <div class="annotation">
+              
+              <div class="sswrap for-h2">
+                <a class="ss" href="#section-30">&#x00a7;</a>
+              </div>
+              <h2>Docco (Business Logics Follow)</h2>
+
+            </div>
+            
+        </li>
+        
+        
+        <li id="section-31">
+            <div class="annotation">
+              
+              <div class="sswrap ">
+                <a class="ss" href="#section-31">&#x00a7;</a>
+              </div>
+              
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  <span class="hljs-meta">@Log</span>
+  <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Docco</span> {</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-32">
+            <div class="annotation">
+              
+              <div class="sswrap ">
+                <a class="ss" href="#section-32">&#x00a7;</a>
+              </div>
+              <p>Helpers &amp; Initial Setup</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">def</span> __dirname = <span class="hljs-keyword">new</span> File(<span class="hljs-string">""</span>).getAbsolutePath()
+    <span class="hljs-keyword">def</span> _ = <span class="hljs-keyword">new</span> Underscore()
+    <span class="hljs-keyword">def</span> JSON = <span class="hljs-keyword">new</span> Json()
+    <span class="hljs-keyword">def</span> fs   = <span class="hljs-keyword">new</span> FS()
+    <span class="hljs-keyword">def</span> path = <span class="hljs-keyword">new</span> Path()
+    <span class="hljs-keyword">def</span> highlightjs = <span class="hljs-keyword">new</span> HighlightJS()
+    <span class="hljs-keyword">def</span> marked = <span class="hljs-keyword">new</span> CommonMark()
+    <span class="hljs-keyword">def</span> commander = <span class="hljs-keyword">new</span> Commander()</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-33">
+            <div class="annotation">
+              
+              <div class="sswrap ">
+                <a class="ss" href="#section-33">&#x00a7;</a>
+              </div>
+              <p>Main Documentation Generation Functions</p>
+<p>Generate the documentation for our configured source file by copying over static
 assets, reading all the source files in, splitting them up into prose+code
 sections, highlighting each file in the appropriate language, and printing them
 out in an HTML template.</p>
 
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">def</span> document(options = [:], k = <span class="hljs-literal">null</span>) {
+      <span class="hljs-keyword">def</span> config = configure options
+  
+      fs.mkdirs(config.output) { -&gt;
+  
+        k ?= { error -&gt; if (error) throw error }
+        def copyAsset = { file, k0 -&gt;
+          if (!fs.existsSync(file)) return k0()
+          fs.copy file, path.join(config.output, path.basename(file)), k0
+        }
+        def complete  = { -&gt;
+          copyAsset(config.css) { error -&gt;
+            if (error) return k(error)
+            if (fs.existsSync(config.public)) return copyAsset(config.public, k)
+            k()
+          }
+        }
+  
+        def files = config.sources.collect()
+  
+        def nextFile
+        if (true) nextFile = { -&gt;
+          def source = files.pop()
+          fs.readFile(source) { error, buffer -&gt;
+            if (error) return k(error)
+  
+            def code = buffer.toString().replaceAll('\r\n', '\n')
+            def sections = parse source, code, config
+            format source, sections, config
+            write source, sections, config
+            files.size() ? nextFile() : complete()
+          }
+        }
+  
+        <span class="hljs-keyword">if</span> (files.size()) nextFile()
+      }
+    }</pre></div></div>
+            
+        </li>
         
-          <div class='highlight'><pre><span class="hljs-function"><span class="hljs-title">document</span> = <span class="hljs-params">(options = {}, callback)</span> -&gt;</span>
-  config = configure options
-
-  fs.mkdirs config.output, <span class="hljs-function">-&gt;</span>
-
-    callback <span class="hljs-keyword">or</span>= <span class="hljs-function"><span class="hljs-params">(error)</span> -&gt;</span> <span class="hljs-keyword">throw</span> error <span class="hljs-keyword">if</span> error
-<span class="hljs-function">    <span class="hljs-title">copyAsset</span>  = <span class="hljs-params">(file, callback)</span> -&gt;</span>
-      <span class="hljs-keyword">return</span> callback() <span class="hljs-keyword">unless</span> fs.existsSync file
-      fs.copy file, path.join(config.output, path.basename(file)), callback
-<span class="hljs-function">    <span class="hljs-title">complete</span>   = -&gt;</span>
-      copyAsset config.css, <span class="hljs-function"><span class="hljs-params">(error)</span> -&gt;</span>
-        <span class="hljs-keyword">return</span> callback error <span class="hljs-keyword">if</span> error
-        <span class="hljs-keyword">return</span> copyAsset config.public, callback <span class="hljs-keyword">if</span> fs.existsSync config.public
-        callback()
-
-    files = config.sources.slice()
-<span class="hljs-function">
-    <span class="hljs-title">nextFile</span> = -&gt;</span>
-      source = files.shift()
-      fs.readFile source, <span class="hljs-function"><span class="hljs-params">(error, buffer)</span> -&gt;</span>
-        <span class="hljs-keyword">return</span> callback error <span class="hljs-keyword">if</span> error
-
-        code = buffer.toString()
-        sections = parse source, code, config
-        format source, sections, config
-        write source, sections, config
-        <span class="hljs-keyword">if</span> files.length <span class="hljs-keyword">then</span> nextFile() <span class="hljs-keyword">else</span> complete()
-
-    nextFile()</pre></div>
         
-      
-        
-        <p>Given a string of source code, <strong>parse</strong> out each block of prose and the code that
+        <li id="section-34">
+            <div class="annotation">
+              
+              <div class="sswrap ">
+                <a class="ss" href="#section-34">&#x00a7;</a>
+              </div>
+              <p>Given a string of source code, <strong>parse</strong> out each block of prose and the code that
 follows it — by detecting which is which, line by line — and then create an
 individual <strong>section</strong> for it. Each section is an object with <code>docsText</code> and
 <code>codeText</code> properties, and eventually <code>docsHtml</code> and <code>codeHtml</code> as well.</p>
 
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">def</span> parse(source, code, config = [:]) {
+      <span class="hljs-keyword">def</span> lines    = code.split <span class="hljs-string">"\n"</span>
+      <span class="hljs-keyword">def</span> sections = []
+      <span class="hljs-keyword">def</span> lang     = getLanguage source, config
+      <span class="hljs-keyword">def</span> hasCode  = <span class="hljs-string">''</span>, docsText = <span class="hljs-string">''</span>, codeText = <span class="hljs-string">''</span>
+  
+      <span class="hljs-keyword">def</span> save = { -&gt;
+        sections.add([<span class="hljs-string">docsText:</span> docsText, <span class="hljs-string">codeText:</span> codeText])
+        hasCode = docsText = codeText = <span class="hljs-string">''</span>
+      }</pre></div></div>
+            
+        </li>
         
-          <div class='highlight'><pre><span class="hljs-function"><span class="hljs-title">parse</span> = <span class="hljs-params">(source, code, config = {})</span> -&gt;</span>
-  lines    = code.split <span class="hljs-string">&#x27;\n&#x27;</span>
-  sections = []
-  lang     = getLanguage source, config
-  hasCode  = docsText = codeText = <span class="hljs-string">&#x27;&#x27;</span>
-<span class="hljs-function">
-  <span class="hljs-title">save</span> = -&gt;</span>
-    sections.push {docsText, codeText}
-    hasCode = docsText = codeText = <span class="hljs-string">&#x27;&#x27;</span></pre></div>
         
-      
-        
-        <p>Our quick-and-dirty implementation of the literate programming style. Simply
+        <li id="section-35">
+            <div class="annotation">
+              
+              <div class="sswrap ">
+                <a class="ss" href="#section-35">&#x00a7;</a>
+              </div>
+              <p>Our quick-and-dirty implementation of the literate programming style. Simply
 invert the prose and code relationship on a per-line basis, and then continue as
 normal below.</p>
 
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>      <span class="hljs-keyword">if</span> (lang.literate) {
+        <span class="hljs-keyword">def</span> isText = <span class="hljs-literal">true</span>, maybeCode = <span class="hljs-literal">true</span>
+        <span class="hljs-keyword">def</span> match
+        <span class="hljs-keyword">for</span> (<span class="hljs-keyword">def</span> line <span class="hljs-keyword">in</span> lines) {
+          <span class="hljs-keyword">switch</span> (<span class="hljs-literal">true</span>) {
+            <span class="hljs-keyword">case</span> maybeCode &amp;&amp; (match = line =~ <span class="hljs-regexp">/^([ ]{4}|[ ]{0,3}\t)/</span>):
+              isText  = <span class="hljs-literal">false</span>
+              hasCode = <span class="hljs-literal">true</span>
+              codeText += line.substring(match[<span class="hljs-number">0</span>][<span class="hljs-number">1</span>].size()) + <span class="hljs-string">'\n'</span>
+              <span class="hljs-keyword">break</span>
+            <span class="hljs-keyword">case</span> maybeCode = line ==~ <span class="hljs-regexp">/^\s*$/</span>:
+              isText ? (docsText += '\n') : (codeText += <span class="hljs-string">'\n'</span>)
+              <span class="hljs-keyword">break</span>
+            <span class="hljs-string">default:</span>
+              isText = <span class="hljs-literal">true</span>
+              <span class="hljs-keyword">if</span> (hasCode) save()
+              docsText += line + <span class="hljs-string">'\n'</span>
+              <span class="hljs-keyword">if</span> (line ==~ <span class="hljs-regexp">/^(---+|===+)$/</span>) save()
+          }
+        }
+      } <span class="hljs-keyword">else</span> {
+        <span class="hljs-keyword">for</span> (<span class="hljs-keyword">def</span> line <span class="hljs-keyword">in</span> lines) {
+          <span class="hljs-keyword">switch</span> (<span class="hljs-literal">true</span>) {
+            <span class="hljs-keyword">case</span> line =~ lang.commentMatcher &amp;&amp; !(line =~ lang.commentFilter):
+              <span class="hljs-keyword">if</span> (hasCode) save()
+              docsText += (line = line.replaceFirst(lang.commentMatcher, <span class="hljs-string">''</span>)) + <span class="hljs-string">'  \n'</span>
+              <span class="hljs-keyword">if</span> (line ==~ <span class="hljs-regexp">/^(---+|===+)$/</span>) save()
+              <span class="hljs-keyword">break</span>
+            <span class="hljs-string">default:</span>
+              hasCode = <span class="hljs-literal">true</span>
+              codeText += line + <span class="hljs-string">'\n'</span>
+          }
+        }
+      }
+      save()
+  
+      sections
+    }</pre></div></div>
+            
+        </li>
         
-          <div class='highlight'><pre>  <span class="hljs-keyword">if</span> lang.literate
-    isText = maybeCode = <span class="hljs-literal">yes</span>
-    <span class="hljs-keyword">for</span> line, i <span class="hljs-keyword">in</span> lines
-      lines[i] = <span class="hljs-keyword">if</span> maybeCode <span class="hljs-keyword">and</span> match = <span class="hljs-regexp">/^([ ]{4}|[ ]{0,3}\t)/</span>.exec line
-        isText = <span class="hljs-literal">no</span>
-        line[match[<span class="hljs-number">0</span>].length..]
-      <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> maybeCode = <span class="hljs-regexp">/^\s*$/</span>.test line
-        <span class="hljs-keyword">if</span> isText <span class="hljs-keyword">then</span> lang.symbol <span class="hljs-keyword">else</span> <span class="hljs-string">&#x27;&#x27;</span>
-      <span class="hljs-keyword">else</span>
-        isText = <span class="hljs-literal">yes</span>
-        lang.symbol + <span class="hljs-string">&#x27; &#x27;</span> + line
-
-  <span class="hljs-keyword">for</span> line <span class="hljs-keyword">in</span> lines
-    <span class="hljs-keyword">if</span> line.match(lang.commentMatcher) <span class="hljs-keyword">and</span> <span class="hljs-keyword">not</span> line.match(lang.commentFilter)
-      save() <span class="hljs-keyword">if</span> hasCode
-      docsText += (line = line.replace(lang.commentMatcher, <span class="hljs-string">&#x27;&#x27;</span>)) + <span class="hljs-string">&#x27;\n&#x27;</span>
-      save() <span class="hljs-keyword">if</span> <span class="hljs-regexp">/^(---+|===+)$/</span>.test line
-    <span class="hljs-keyword">else</span>
-      hasCode = <span class="hljs-literal">yes</span>
-      codeText += line + <span class="hljs-string">&#x27;\n&#x27;</span>
-  save()
-
-  sections</pre></div>
         
-      
-        
-        <p>To <strong>format</strong> and highlight the now-parsed sections of code, we use <strong>Highlight.js</strong>
+        <li id="section-36">
+            <div class="annotation">
+              
+              <div class="sswrap ">
+                <a class="ss" href="#section-36">&#x00a7;</a>
+              </div>
+              <p>To <strong>format</strong> and highlight the now-parsed sections of code, we use <strong>Highlight.js</strong>
 over stdio, and run the text of their corresponding comments through
-<strong>Markdown</strong>, using <a href="https://github.com/chjj/marked">Marked</a>.</p>
+<strong>Markdown</strong>, using <a href="https://github.com/commonmark/commonmark-java">CommonMark</a>.</p>
 
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">def</span> format(source, sections, config) {
+      <span class="hljs-keyword">def</span> language      = getLanguage source, config
+      <span class="hljs-keyword">def</span> markedOptions = [<span class="hljs-string">smartypants:</span> <span class="hljs-literal">true</span>]
+  
+      <span class="hljs-keyword">if</span> (config.marked) {
+        markedOptions = config.marked
+      }
+  
+      marked.setOptions markedOptions
+      marked.setOptions([
+        <span class="hljs-string">highlight:</span> { code, lang -&gt;
+          lang ?= language.name
+    
+          if (highlightjs.getLanguage(lang)) {
+            highlightjs.highlight(code, [language: lang]).value
+          } <span class="hljs-keyword">else</span> {
+            log.info <span class="hljs-string">"docco: couldn't highlight code block with unknown language '#{lang}' in #{source}"</span>
+            code
+          }
+        }
+      ])
+  
+      <span class="hljs-keyword">for</span> (<span class="hljs-keyword">def</span> section <span class="hljs-keyword">in</span> sections) {
+        <span class="hljs-keyword">def</span> code
+        code = highlightjs.highlight(section.codeText, [<span class="hljs-string">language:</span> language.name]).value
+        code = code.replaceFirst(<span class="hljs-regexp">/\s+$/</span>, <span class="hljs-string">''</span>)
+        section.codeHtml = <span class="hljs-string">"&lt;div class='highlight'&gt;&lt;pre&gt;${code}&lt;/pre&gt;&lt;/div&gt;"</span>
+        section.docsHtml = marked.apply(section.docsText)
+      }
+    }</pre></div></div>
+            
+        </li>
         
-          <div class='highlight'><pre><span class="hljs-function"><span class="hljs-title">format</span> = <span class="hljs-params">(source, sections, config)</span> -&gt;</span>
-  language = getLanguage source, config</pre></div>
         
-      
-        
-        <p>Pass any user defined options to Marked if specified via command line option</p>
-
-        
-          <div class='highlight'><pre>  markedOptions =
-    smartypants: <span class="hljs-literal">true</span>
-
-  <span class="hljs-keyword">if</span> config.marked
-    markedOptions = config.marked
-
-  marked.setOptions markedOptions</pre></div>
-        
-      
-        
-        <p>Tell Marked how to highlight code blocks within comments, treating that code
-as either the language specified in the code block or the language of the file
-if not specified.</p>
-
-        
-          <div class='highlight'><pre>  marked.setOptions {
-    highlight: <span class="hljs-function"><span class="hljs-params">(code, lang)</span> -&gt;</span>
-      lang <span class="hljs-keyword">or</span>= language.name
-
-      <span class="hljs-keyword">if</span> highlightjs.getLanguage(lang)
-        highlightjs.highlight(code, {language: lang}).value
-      <span class="hljs-keyword">else</span>
-        console.warn <span class="hljs-string">&quot;docco: couldn&#x27;t highlight code block with unknown language &#x27;<span class="hljs-subst">#{lang}</span>&#x27; in <span class="hljs-subst">#{source}</span>&quot;</span>
-        code
-  }
-
-  <span class="hljs-keyword">for</span> section, i <span class="hljs-keyword">in</span> sections
-    code = highlightjs.highlight(section.codeText, {language: language.name}).value
-    code = code.replace(<span class="hljs-regexp">/\s+$/</span>, <span class="hljs-string">&#x27;&#x27;</span>)
-    section.codeHtml = <span class="hljs-string">&quot;&lt;div class=&#x27;highlight&#x27;&gt;&lt;pre&gt;<span class="hljs-subst">#{code}</span>&lt;/pre&gt;&lt;/div&gt;&quot;</span>
-    section.docsHtml = marked(section.docsText)</pre></div>
-        
-      
-        
-        <p>Once all of the code has finished highlighting, we can <strong>write</strong> the resulting
+        <li id="section-37">
+            <div class="annotation">
+              
+              <div class="sswrap ">
+                <a class="ss" href="#section-37">&#x00a7;</a>
+              </div>
+              <p>Once all of the code has finished highlighting, we can <strong>write</strong> the resulting
 documentation file by passing the completed HTML sections into the template,
 and rendering it to the specified output path.</p>
 
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">def</span> write(source, sections, config) {
+      <span class="hljs-keyword">def</span> first
+  
+      <span class="hljs-keyword">def</span> destination = { file -&gt;
+        path.join(config.output, path.dirname(file), path.basename(file, path.extname(file)) + <span class="hljs-string">'.html'</span>)
+      }
+  
+      <span class="hljs-keyword">def</span> relative = { file -&gt;
+        <span class="hljs-keyword">def</span> to = path.dirname(path.resolve(file))
+        <span class="hljs-keyword">def</span> from = path.dirname(path.resolve(destination(source)))
+        path.join(path.relative(from, to), path.basename(file))
+      }</pre></div></div>
+            
+        </li>
         
-          <div class='highlight'><pre><span class="hljs-function"><span class="hljs-title">write</span> = <span class="hljs-params">(source, sections, config)</span> -&gt;</span>
-<span class="hljs-function">
-  <span class="hljs-title">destination</span> = <span class="hljs-params">(file)</span> -&gt;</span>
-    path.join(config.output, path.dirname(file), path.basename(file, path.extname(file)) + <span class="hljs-string">&#x27;.html&#x27;</span>)
-<span class="hljs-function">
-  <span class="hljs-title">relative</span> = <span class="hljs-params">(file)</span> -&gt;</span>
-    to = path.dirname(path.resolve(file))
-    <span class="hljs-keyword">from</span> = path.dirname(path.resolve(destination(source)))
-    path.join(path.relative(<span class="hljs-keyword">from</span>, to), path.basename(file))</pre></div>
         
-      
-        
-        <p>The <strong>title</strong> of the file is either the first heading in the prose, or the
+        <li id="section-38">
+            <div class="annotation">
+              
+              <div class="sswrap ">
+                <a class="ss" href="#section-38">&#x00a7;</a>
+              </div>
+              <p>The <strong>title</strong> of the file is either the first heading in the prose, or the
 name of the source file.</p>
 
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>      <span class="hljs-keyword">def</span> firstSection = _.find sections, { section -&gt;
+        section.docsText.size() &gt; <span class="hljs-number">0</span>
+      }
+      <span class="hljs-keyword">if</span> (firstSection) first = marked.lexer(firstSection.docsText).firstChild
+      <span class="hljs-keyword">def</span> hasTitle = first &amp;&amp; <span class="hljs-string">"$first.class"</span> == <span class="hljs-string">"class org.commonmark.node.Heading"</span> &amp;&amp; first.level == <span class="hljs-number">1</span>
+      <span class="hljs-keyword">def</span> title = hasTitle ? first.firstChild.literal : path.basename(source)
+      <span class="hljs-keyword">def</span> css = relative path.join(config.output, path.basename(config.css))
+  
+      <span class="hljs-keyword">def</span> html = config.template([
+        <span class="hljs-string">sources:</span> config.sources, <span class="hljs-string">css:</span> css, <span class="hljs-string">title:</span> title, <span class="hljs-string">hasTitle:</span> hasTitle,
+        <span class="hljs-string">sections:</span> sections, <span class="hljs-string">path:</span> path, <span class="hljs-string">destination:</span> destination, <span class="hljs-string">relative:</span> relative
+      ])
+  
+      println <span class="hljs-string">"docco: ${source} -&gt; ${destination source}"</span>
+      fs.outputFileSync destination(source), html
+    }</pre></div></div>
+            
+        </li>
         
-          <div class='highlight'><pre>  firstSection = _.find sections, <span class="hljs-function"><span class="hljs-params">(section)</span> -&gt;</span>
-    section.docsText.length &gt; <span class="hljs-number">0</span>
-  first = marked.lexer(firstSection.docsText)[<span class="hljs-number">0</span>] <span class="hljs-keyword">if</span> firstSection
-  hasTitle = first <span class="hljs-keyword">and</span> first.type <span class="hljs-keyword">is</span> <span class="hljs-string">&#x27;heading&#x27;</span> <span class="hljs-keyword">and</span> first.depth <span class="hljs-keyword">is</span> <span class="hljs-number">1</span>
-  title = <span class="hljs-keyword">if</span> hasTitle <span class="hljs-keyword">then</span> first.text <span class="hljs-keyword">else</span> path.basename source
-  css = relative path.join(config.output, path.basename(config.css))
-
-  html = config.template {sources: config.sources, css,
-    title, hasTitle, sections, path, destination, relative}
-
-  console.log <span class="hljs-string">&quot;docco: <span class="hljs-subst">#{source}</span> -&gt; <span class="hljs-subst">#{destination source}</span>&quot;</span>
-  fs.outputFileSync destination(source), html</pre></div>
         
-      
-        
-        <h2 id="configuration">Configuration</h2>
-
-        
-      
-        
-        <p>Default configuration <strong>options</strong>. All of these may be extended by
+        <li id="section-39">
+            <div class="annotation">
+              
+              <div class="sswrap ">
+                <a class="ss" href="#section-39">&#x00a7;</a>
+              </div>
+              <p>Configuration</p>
+<p>Default configuration <strong>options</strong>. All of these may be extended by
 user-specified options.</p>
 
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">def</span> defaults = [
+      <span class="hljs-string">layout:</span>     <span class="hljs-string">'parallel'</span>,
+      <span class="hljs-string">output:</span>     <span class="hljs-string">'docs'</span>,
+      <span class="hljs-string">template:</span>   <span class="hljs-literal">null</span>,
+      <span class="hljs-string">css:</span>        <span class="hljs-literal">null</span>,
+      <span class="hljs-string">extension:</span>  <span class="hljs-literal">null</span>,
+      <span class="hljs-string">languages:</span>  [:],
+      <span class="hljs-string">marked:</span>     <span class="hljs-literal">null</span>
+    ]</pre></div></div>
+            
+        </li>
         
-          <div class='highlight'><pre>defaults =
-  layout:     <span class="hljs-string">&#x27;parallel&#x27;</span>
-  output:     <span class="hljs-string">&#x27;docs&#x27;</span>
-  template:   <span class="hljs-literal">null</span>
-  css:        <span class="hljs-literal">null</span>
-  extension:  <span class="hljs-literal">null</span>
-  languages:  {}
-  marked:     <span class="hljs-literal">null</span></pre></div>
         
-      
-        
-        <p><strong>Configure</strong> this particular run of Docco. We might use a passed-in external
+        <li id="section-40">
+            <div class="annotation">
+              
+              <div class="sswrap ">
+                <a class="ss" href="#section-40">&#x00a7;</a>
+              </div>
+              <p><strong>Configure</strong> this particular run of Docco. We might use a passed-in external
 template, or one of the built-in <strong>layouts</strong>. We only attempt to process
 source files for languages for which we have definitions.</p>
 
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">def</span> configure(options) {
+      <span class="hljs-keyword">def</span> config = _.extend([:], defaults, _.pick(options.opts(), _.keys(defaults)))
+  
+      config.languages = buildMatchers config.languages</pre></div></div>
+            
+        </li>
         
-          <div class='highlight'><pre><span class="hljs-function"><span class="hljs-title">configure</span> = <span class="hljs-params">(options)</span> -&gt;</span>
-  config = _.extend {}, defaults, _.pick(options.opts(), _.keys(defaults)...)
-
-  config.languages = buildMatchers config.languages</pre></div>
         
-      
-        
-        <p>The user is able to override the layout file used with the <code>--template</code> parameter.
+        <li id="section-41">
+            <div class="annotation">
+              
+              <div class="sswrap ">
+                <a class="ss" href="#section-41">&#x00a7;</a>
+              </div>
+              <p>The user is able to override the layout file used with the <code>--template</code> parameter.
 In this case, it is also neccessary to explicitly specify a stylesheet file.
 These custom templates are compiled exactly like the predefined ones, but the <code>public</code> folder
 is only copied for the latter.</p>
 
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>      <span class="hljs-keyword">if</span> (options.template) {
+        <span class="hljs-keyword">if</span> (!options.css) {
+          log.info <span class="hljs-string">"docco: no stylesheet file specified"</span>
+        }
+        config.layout = <span class="hljs-literal">null</span>
+      } <span class="hljs-keyword">else</span> {
+        <span class="hljs-keyword">def</span> dir = config.layout = path.join __dirname, <span class="hljs-string">'resources'</span>, config.layout
+        <span class="hljs-keyword">if</span> (fs.existsSync(path.join dir, <span class="hljs-string">'public'</span>)) {
+          config.<span class="hljs-keyword">public</span>         = path.join dir, <span class="hljs-string">'public'</span>
+        }
+        config.template         = path.join dir, <span class="hljs-string">'docco.jst'</span>
+        config.css              = options.css ?: path.join(dir, <span class="hljs-string">'docco.css'</span>)
+      }
+      config.template = _.template fs.readFileSync(config.template)
+  
+      <span class="hljs-keyword">if</span> (options.marked) {
+        config.marked = JSON.parse fs.readFileSync(options.marked)
+      }
+  
+      config.sources = options.args.filter({ source -&gt;
+        <span class="hljs-keyword">def</span> lang = getLanguage source, config
+        <span class="hljs-keyword">if</span> (!lang) {
+          log.info <span class="hljs-string">"docco: skipped unknown type (${path.basename source})"</span>
+        }
+        lang
+      }).sort()
+  
+      config
+    }</pre></div></div>
+            
+        </li>
         
-          <div class='highlight'><pre>  <span class="hljs-keyword">if</span> options.template
-    <span class="hljs-keyword">unless</span> options.css
-      console.warn <span class="hljs-string">&quot;docco: no stylesheet file specified&quot;</span>
-    config.layout = <span class="hljs-literal">null</span>
-  <span class="hljs-keyword">else</span>
-    dir = config.layout = path.join __dirname, <span class="hljs-string">&#x27;resources&#x27;</span>, config.layout
-    config.public       = path.join dir, <span class="hljs-string">&#x27;public&#x27;</span> <span class="hljs-keyword">if</span> fs.existsSync path.join dir, <span class="hljs-string">&#x27;public&#x27;</span>
-    config.template     = path.join dir, <span class="hljs-string">&#x27;docco.jst&#x27;</span>
-    config.css          = options.css <span class="hljs-keyword">or</span> path.join dir, <span class="hljs-string">&#x27;resources/linear/docco.css&#x27;</span>
-  config.template = _.template fs.readFileSync(config.template).toString()
-
-  <span class="hljs-keyword">if</span> options.marked
-    config.marked = <span class="hljs-built_in">JSON</span>.parse fs.readFileSync(options.marked)
-
-  config.sources = options.args.filter(<span class="hljs-function"><span class="hljs-params">(source)</span> -&gt;</span>
-    lang = getLanguage source, config
-    console.warn <span class="hljs-string">&quot;docco: skipped unknown type (<span class="hljs-subst">#{path.basename source}</span>)&quot;</span> <span class="hljs-keyword">unless</span> lang
-    lang
-  ).sort()
-
-  config</pre></div>
         
-      
-        
-        <h2 id="helpers--initial-setup">Helpers &amp; Initial Setup</h2>
-
-        
-      
-        
-        <p>Require our external dependencies.</p>
-
-        
-          <div class='highlight'><pre>_           = <span class="hljs-built_in">require</span> <span class="hljs-string">&#x27;underscore&#x27;</span>
-fs          = <span class="hljs-built_in">require</span> <span class="hljs-string">&#x27;fs-extra&#x27;</span>
-path        = <span class="hljs-built_in">require</span> <span class="hljs-string">&#x27;path&#x27;</span>
-marked      = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;marked&#x27;</span>).marked
-commander   = <span class="hljs-built_in">require</span> <span class="hljs-string">&#x27;commander&#x27;</span>
-highlightjs = <span class="hljs-built_in">require</span> <span class="hljs-string">&#x27;highlight.js&#x27;</span></pre></div>
-        
-      
-        
-        <p>Languages are stored in JSON in the file <code>resources/languages.json</code>.
+        <li id="section-42">
+            <div class="annotation">
+              
+              <div class="sswrap ">
+                <a class="ss" href="#section-42">&#x00a7;</a>
+              </div>
+              <p>Languages are stored in JSON in the file <code>resources/languages.json</code>.
 Each item maps the file extension to the name of the language and the
-<code>symbol</code> that indicates a line comment. To add support for a new programming
+<code>symbol</code> that indicates a line comment. To enroll a new programming
 language to Docco, just add it to the file.</p>
 
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">def</span> languages = JSON.parse fs.readFileSync(path.join(__dirname, <span class="hljs-string">'resources'</span>, <span class="hljs-string">'languages.json'</span>))</pre></div></div>
+            
+        </li>
         
-          <div class='highlight'><pre>languages = <span class="hljs-built_in">JSON</span>.parse fs.readFileSync(path.join(__dirname, <span class="hljs-string">&#x27;resources&#x27;</span>, <span class="hljs-string">&#x27;languages.json&#x27;</span>))</pre></div>
         
-      
-        
-        <p>Build out the appropriate matchers and delimiters for each language.</p>
+        <li id="section-43">
+            <div class="annotation">
+              
+              <div class="sswrap ">
+                <a class="ss" href="#section-43">&#x00a7;</a>
+              </div>
+              <p>Build out the appropriate matchers and delimiters for each language.</p>
 
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">def</span> buildMatchers(languages) {
+      languages.each { ext, l -&gt;</pre></div></div>
+            
+        </li>
         
-          <div class='highlight'><pre><span class="hljs-function"><span class="hljs-title">buildMatchers</span> = <span class="hljs-params">(languages)</span> -&gt;</span>
-  <span class="hljs-keyword">for</span> ext, l <span class="hljs-keyword">of</span> languages</pre></div>
         
-      
-        
-        <p>Does the line begin with a comment?</p>
+        <li id="section-44">
+            <div class="annotation">
+              
+              <div class="sswrap ">
+                <a class="ss" href="#section-44">&#x00a7;</a>
+              </div>
+              <p>Does the line begin with a comment?</p>
 
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        l.commentMatcher = <span class="hljs-regexp">~/^\s*${l.symbol}\s?/</span></pre></div></div>
+            
+        </li>
         
-          <div class='highlight'><pre>    l.commentMatcher = <span class="hljs-regexp">///^\s*<span class="hljs-subst">#{l.symbol}</span>\s?///</span></pre></div>
         
-      
-        
-        <p>Ignore <a href="http://en.wikipedia.org/wiki/Shebang_%28Unix%29">hashbangs</a> and interpolations…</p>
+        <li id="section-45">
+            <div class="annotation">
+              
+              <div class="sswrap ">
+                <a class="ss" href="#section-45">&#x00a7;</a>
+              </div>
+              <p>Ignore <a href="http://en.wikipedia.org/wiki/Shebang_%28Unix%29">hashbangs</a> and interpolations...</p>
 
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        l.commentFilter = <span class="hljs-string">$/(^#![/]|^\s*#\${'{'})/$</span>
+      }
+      languages
+    }</pre></div></div>
+            
+        </li>
         
-          <div class='highlight'><pre>    l.commentFilter = <span class="hljs-regexp">/(^#![/</span>]|^\s*<span class="hljs-comment">#\{)/</span>
-  languages
-languages = buildMatchers languages</pre></div>
         
-      
-        
-        <p>A function to get the current language we’re documenting, based on the
-file extension. Detect and tag “literate” <code>.ext.md</code> variants.</p>
+        <li id="section-46">
+            <div class="annotation">
+              
+              <div class="sswrap ">
+                <a class="ss" href="#section-46">&#x00a7;</a>
+              </div>
+              <p>A function to get the current language we're documenting, based on the
+file extension. Detect and tag &quot;literate&quot; <code>.ext.md</code> variants.</p>
 
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">def</span> getLanguage(source, config) {
+      <span class="hljs-keyword">def</span> ext  = config.extension ?: path.extname(source) ?: path.basename(source)
+      <span class="hljs-keyword">def</span> lang = config.languages?[ext] ?: languages[ext]
+      <span class="hljs-keyword">if</span> (lang &amp;&amp; lang.name == <span class="hljs-string">'markdown'</span>) {
+        <span class="hljs-keyword">def</span> codeExt  = path.extname(path.basename(source, ext))
+        <span class="hljs-keyword">def</span> codeLang = config.languages?[codeExt] ?: languages[codeExt]
+        <span class="hljs-keyword">if</span> (codeExt &amp;&amp; codeLang) {
+          lang = _.extend([:], codeLang, [<span class="hljs-string">literate:</span> <span class="hljs-literal">true</span>])
+        }
+      }
+      lang
+    }</pre></div></div>
+            
+        </li>
         
-          <div class='highlight'><pre><span class="hljs-function"><span class="hljs-title">getLanguage</span> = <span class="hljs-params">(source, config)</span> -&gt;</span>
-  ext  = config.extension <span class="hljs-keyword">or</span> path.extname(source) <span class="hljs-keyword">or</span> path.basename(source)
-  lang = config.languages?[ext] <span class="hljs-keyword">or</span> languages[ext]
-  <span class="hljs-keyword">if</span> lang <span class="hljs-keyword">and</span> lang.name <span class="hljs-keyword">is</span> <span class="hljs-string">&#x27;markdown&#x27;</span>
-    codeExt = path.extname(path.basename(source, ext))
-    codeLang = config.languages?[codeExt] <span class="hljs-keyword">or</span> languages[codeExt]
-    <span class="hljs-keyword">if</span> codeExt <span class="hljs-keyword">and</span> codeLang
-      lang = _.extend {}, codeLang, {literate: <span class="hljs-literal">yes</span>}
-  lang</pre></div>
         
-      
-        
-        <p>Keep it DRY. Extract the docco <strong>version</strong> from <code>package.json</code></p>
+        <li id="section-47">
+            <div class="annotation">
+              
+              <div class="sswrap ">
+                <a class="ss" href="#section-47">&#x00a7;</a>
+              </div>
+              <p>Keep it DRY. Extract the docco <strong>version</strong> from <code>package.json</code></p>
 
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">def</span> version = JSON.parse(fs.readFileSync(path.join(__dirname, <span class="hljs-string">'package.json'</span>))).version</pre></div></div>
+            
+        </li>
         
-          <div class='highlight'><pre>version = <span class="hljs-built_in">JSON</span>.parse(fs.readFileSync(path.join(__dirname, <span class="hljs-string">&#x27;package.json&#x27;</span>))).version</pre></div>
         
-      
-        
-        <h2 id="command-line-interface">Command Line Interface</h2>
+        <li id="section-48">
+            <div class="annotation">
+              
+              <div class="sswrap ">
+                <a class="ss" href="#section-48">&#x00a7;</a>
+              </div>
+              <p>Command Line Interface</p>
+<p>Finally, let's define the interface to run Docco from the command line.
+Parse options using <a href="https://joshdurbin.net/posts/2020-3-groovy-clibuilder/">CliBuilder</a>.</p>
 
-        
-      
-        
-        <p>Finally, let’s define the interface to run Docco from the command line.
-Parse options using <a href="https://github.com/visionmedia/commander.js">Commander</a>.</p>
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">def</span> run(args = args) {
+      <span class="hljs-keyword">def</span> c = defaults
+      commander.version(version)
+        .usage(<span class="hljs-string">'groovy docco.gy [options] files'</span>)
+        .option(<span class="hljs-string">'-L, --languages [file]'</span>, <span class="hljs-string">'use a custom languages.json'</span>, _.compose(JSON.&amp;parse, fs.&amp;readFileSync))
+        .option(<span class="hljs-string">'-l, --layout [name]'</span>,    <span class="hljs-string">'choose a layout (parallel, linear or classic)'</span>, c.layout)
+        .option(<span class="hljs-string">'-o, --output [path]'</span>,    <span class="hljs-string">'output to a given folder'</span>, c.output)
+        .option(<span class="hljs-string">'-c, --css [file]'</span>,       <span class="hljs-string">'use a custom css file'</span>, c.css)
+        .option(<span class="hljs-string">'-t, --template [file]'</span>,  <span class="hljs-string">'use a custom .jst template'</span>, c.template)
+        .option(<span class="hljs-string">'-e, --extension [ext]'</span>,  <span class="hljs-string">'assume a file extension for all inputs'</span>, c.extension)
+        .option(<span class="hljs-string">'-m, --marked [file]'</span>,    <span class="hljs-string">'use custom marked options'</span>, c.marked)
+        .parse(args)
+      <span class="hljs-keyword">if</span> (commander.args.length) {
+        document commander
+      } <span class="hljs-keyword">else</span> {
+        commander.usage()
+      }
+    }
 
-        
-          <div class='highlight'><pre><span class="hljs-function"><span class="hljs-title">run</span> = <span class="hljs-params">(args = process.argv)</span> -&gt;</span>
-  c = defaults
-  commander.version(version)
-    .usage(<span class="hljs-string">&#x27;[options] files&#x27;</span>)
-    .option(<span class="hljs-string">&#x27;-L, --languages [file]&#x27;</span>, <span class="hljs-string">&#x27;use a custom languages.json&#x27;</span>, _.compose <span class="hljs-built_in">JSON</span>.parse, fs.readFileSync)
-    .option(<span class="hljs-string">&#x27;-l, --layout [name]&#x27;</span>,    <span class="hljs-string">&#x27;choose a layout (parallel, linear or classic)&#x27;</span>, c.layout)
-    .option(<span class="hljs-string">&#x27;-o, --output [path]&#x27;</span>,    <span class="hljs-string">&#x27;output to a given folder&#x27;</span>, c.output)
-    .option(<span class="hljs-string">&#x27;-c, --css [file]&#x27;</span>,       <span class="hljs-string">&#x27;use a custom css file&#x27;</span>, c.css)
-    .option(<span class="hljs-string">&#x27;-t, --template [file]&#x27;</span>,  <span class="hljs-string">&#x27;use a custom .jst template&#x27;</span>, c.template)
-    .option(<span class="hljs-string">&#x27;-e, --extension [ext]&#x27;</span>,  <span class="hljs-string">&#x27;assume a file extension for all inputs&#x27;</span>, c.extension)
-    .option(<span class="hljs-string">&#x27;-m, --marked [file]&#x27;</span>,    <span class="hljs-string">&#x27;use custom marked options&#x27;</span>, c.marked)
-    .parse(args)
-    .name = <span class="hljs-string">&quot;docco&quot;</span>
-  <span class="hljs-keyword">if</span> commander.args.length
-    document commander
-  <span class="hljs-keyword">else</span>
-    console.log commander.helpInformation()</pre></div>
-        
-      
-        
-        <h2 id="public-api">Public API</h2>
+    <span class="hljs-keyword">def</span> args
+  
+    Docco(Map context) {
+      commander._ = _
+      fs.path     = path
+      fs.tasks    = context.tasks
+      args        = context.args
+      languages   = buildMatchers languages
+    }
+  }
 
+  DoccoMain(Binding context) {
+    <span class="hljs-keyword">super</span>(context)
+  }
+}</pre></div></div>
+            
+        </li>
         
-      
-        
-        
-        
-          <div class='highlight'><pre>Docco = module.<span class="hljs-built_in">exports</span> = {run, document, parse, format, version}</pre></div>
-        
-      
-      <div class="fleur">h</div>
-    </div>
+    </ul>
   </div>
 </body>
 </html>
