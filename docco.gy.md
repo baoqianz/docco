@@ -12,8 +12,10 @@ syntax highlighting.
 This page is the result of running Docco against its own
 [source file](https://github.com/baoqianz/docco/blob/master/docco.gy.md).
 
-1. Ensure that Java 11+ and Groovy 3+ are installed on your system:  
-`java -version`
+1. Make sure [Java 11](https://community.chocolatey.org/packages/Temurin11)+
+and [Groovy 3](https://community.chocolatey.org/packages/groovy)+
+are installed on your system  
+`java -version`  
 `groovy -version`
 
 2. Download the [Docco release](https://github.com/baoqianz/docco/releases/download/0.9.1/release.zip) and unzip it
@@ -29,17 +31,25 @@ and is released under the [Lil License](http://lillicense.org/v1.html).
 
 Docco can be used to process code written in any of
 [the supported languages](https://github.com/Sayi/Highlight.java/tree/master/src/main/java/com/codewaves/codehighlight/languages).
-If it doesn't handle your favorite yet, feel free to
+If it doesn't enroll yet, feel free to
 [add it to the list](https://github.com/baoqianz/docco/blob/master/resources/languages.json).
 Finally, the ["literate" style](http://coffeescript.org/#literate) of the supported languages
 are also supported — just tack an `.md` extension on the end:
 `.groovy.md`, `.py.md`, and so on.
+
+
+External Dependencies
+---------------------
 
     @Grapes([
       @Grab("org.commonmark:commonmark:0.22.0"),
       @Grab("com.deepoove:codehighlight:1.0.3"),
     ])
     
+
+Imports
+-------
+
     import com.codewaves.codehighlight.core.Highlighter
     import com.codewaves.codehighlight.core.Keyword
     import com.codewaves.codehighlight.core.Language
@@ -62,7 +72,14 @@ are also supported — just tack an `.md` extension on the end:
     import org.commonmark.parser.Parser
     import org.commonmark.renderer.html.HtmlRenderer as MarkdownHtmlRenderer
     
+
+The Groovy Script & Main Function
+---------------------------------
+
     class DoccoMain extends Script {
+
+main()
+
       static void main(String[] args) {
         InvokerHelper.runScript(DoccoMain.class, args)
       }
@@ -82,11 +99,16 @@ are also supported — just tack an `.md` extension on the end:
         }
       }
     
+Entry Point
+
       def run(args = args) {
         before()
         o = new Docco(args: args, tasks: tasks)
         o.run()
         after()
+
+Public API
+
         this.exports = [
           run: o::run,
           document: o::document,
@@ -97,6 +119,12 @@ are also supported — just tack an `.md` extension on the end:
         ]
       }
     
+
+Code Highlight Patch
+--------------------
+
+ECMAScript
+
       @CompileStatic
       class ECMAScript {
         static final String IDENT_RE = '[A-Za-z$_][0-9A-Za-z$_]*'
@@ -251,6 +279,9 @@ are also supported — just tack an `.md` extension on the end:
           ERROR_TYPES
       }
       
+
+Coffeescript
+
       @CompileStatic
       class CoffeescriptLanguage implements LanguageBuilder {
         private static String[] ALIASES = ['coffee']
@@ -400,6 +431,10 @@ are also supported — just tack an `.md` extension on the end:
         }
       }
       
+
+Set Property
+------------
+
       @CompileStatic
       class Utils {
         static void setProperty(Class clazz, obj, String property, value) {
@@ -413,6 +448,10 @@ are also supported — just tack an `.md` extension on the end:
         }
       }
       
+
+FS
+--
+
       class FS {
         def antBuilder = new AntBuilder()
       
@@ -469,6 +508,10 @@ are also supported — just tack an `.md` extension on the end:
         }
       }
       
+
+Path
+----
+
       class Path {
         def resolve(path) {
           new File(path).getAbsolutePath()
@@ -527,6 +570,10 @@ are also supported — just tack an `.md` extension on the end:
         }
       }
       
+
+Markdown
+--------
+
       class CommonMark {
         def parser = Parser.builder().build()
         def renderer = MarkdownHtmlRenderer.builder().build()
@@ -543,6 +590,10 @@ are also supported — just tack an `.md` extension on the end:
         }
       }
       
+
+highlight.js
+------------
+
       class HighlightJS {
         def highlighter = new Highlighter<CharSequence>(new RendererFactory());
         def getLanguage(String name) {
@@ -563,6 +614,9 @@ are also supported — just tack an `.md` extension on the end:
           }
         }
       
+
+Add support for coffeescript code highlighting
+
         HighlightJS() {
           Highlighter.registerLanguage(
             "coffeescript",
@@ -578,7 +632,11 @@ are also supported — just tack an `.md` extension on the end:
         }
       }
       
-      class UnderScore {
+
+Underscore
+----------
+
+      class Underscore {
         def t = new StreamingTemplateEngine()
         def find(list, Closure predicate) {
           list.find predicate
@@ -622,6 +680,10 @@ are also supported — just tack an `.md` extension on the end:
         }
       }
       
+
+JSON
+----
+
       class Json {
         def jsonSlurper = new JsonSlurper()
         def parse(String text) {
@@ -633,6 +695,10 @@ are also supported — just tack an `.md` extension on the end:
         }
       }
       
+
+Commander
+---------
+
       class Commander {
         def cli     = new CliBuilder(stopAtNonOption: false)
         def options = null
@@ -722,10 +788,18 @@ are also supported — just tack an `.md` extension on the end:
         def _
       }
       
+
+Docco (Business Logics Follow)
+------------------------------
+
       @Log
       class Docco {
+
+
+Helpers & Initial Setup
+
         def __dirname = new File("").getAbsolutePath()
-        def _ = new UnderScore()
+        def _ = new Underscore()
         def JSON = new Json()
         def fs   = new FS()
         def path = new Path()
@@ -733,6 +807,14 @@ are also supported — just tack an `.md` extension on the end:
         def marked = new CommonMark()
         def commander = new Commander()
       
+
+Main Documentation Generation Functions
+
+Generate the documentation for our configured source file by copying over static
+assets, reading all the source files in, splitting them up into prose+code
+sections, highlighting each file in the appropriate language, and printing them
+out in an HTML template.
+
         def document(options = [:], k = null) {
           def config = configure options
       
@@ -771,6 +853,12 @@ are also supported — just tack an `.md` extension on the end:
           }
         }
       
+
+Given a string of source code, **parse** out each block of prose and the code that
+follows it — by detecting which is which, line by line — and then create an
+individual **section** for it. Each section is an object with `docsText` and
+`codeText` properties, and eventually `docsHtml` and `codeHtml` as well.
+
         def parse(source, code, config = [:]) {
           def lines    = code.split "\n"
           def sections = []
@@ -782,35 +870,42 @@ are also supported — just tack an `.md` extension on the end:
             hasCode = docsText = codeText = ''
           }
       
+Our quick-and-dirty implementation of the literate programming style. Simply
+invert the prose and code relationship on a per-line basis, and then continue as
+normal below.
+
           if (lang.literate) {
             def isText = true, maybeCode = true
             def match
-            lines.eachWithIndex { line, i ->
-              lines[i] = {switch (true) {
+            for (def line in lines) {
+              switch (true) {
                 case maybeCode && (match = line =~ /^([ ]{4}|[ ]{0,3}\t)/):
-                  isText = false
-                  line.substring(match[0][1].size())
+                  isText  = false
+                  hasCode = true
+                  codeText += line.substring(match[0][1].size()) + '\n'
                   break
                 case maybeCode = line ==~ /^\s*$/:
-                  isText ? lang.symbol : ""
+                  isText ? (docsText += '\n') : (codeText += '\n')
                   break
                 default:
                   isText = true
-                  lang.symbol + ' ' + line
-              }}()
+                  if (hasCode) save()
+                  docsText += line + '\n'
+                  if (line ==~ /^(---+|===+)$/) save()
+              }
             }
-          }
-      
-          for (def line in lines) {
-            switch (true) {
-              case line =~ lang.commentMatcher && !(line =~ lang.commentFilter):
-                if (hasCode) save()
-                docsText += (line = line.replaceFirst(lang.commentMatcher, '')) + '\n'
-                if (line ==~ /^(---+|===+)$/) save()
-                break
-              default:
-                hasCode = true
-                codeText += line + '\n'
+          } else {
+            for (def line in lines) {
+              switch (true) {
+                case line =~ lang.commentMatcher && !(line =~ lang.commentFilter):
+                  if (hasCode) save()
+                  docsText += (line = line.replaceFirst(lang.commentMatcher, '')) + '  \n'
+                  if (line ==~ /^(---+|===+)$/) save()
+                  break
+                default:
+                  hasCode = true
+                  codeText += line + '\n'
+              }
             }
           }
           save()
@@ -818,6 +913,11 @@ are also supported — just tack an `.md` extension on the end:
           sections
         }
       
+
+To **format** and highlight the now-parsed sections of code, we use **Highlight.js**
+over stdio, and run the text of their corresponding comments through
+**Markdown**, using [CommonMark](https://github.com/commonmark/commonmark-java).
+
         def format(source, sections, config) {
           def language      = getLanguage source, config
           def markedOptions = [smartypants: true]
@@ -849,6 +949,11 @@ are also supported — just tack an `.md` extension on the end:
           }
         }
       
+
+Once all of the code has finished highlighting, we can **write** the resulting
+documentation file by passing the completed HTML sections into the template,
+and rendering it to the specified output path.
+
         def write(source, sections, config) {
           def first
       
@@ -862,6 +967,9 @@ are also supported — just tack an `.md` extension on the end:
             path.join(path.relative(from, to), path.basename(file))
           }
       
+The **title** of the file is either the first heading in the prose, or the
+name of the source file.
+
           def firstSection = _.find sections, { section ->
             section.docsText.size() > 0
           }
@@ -879,6 +987,12 @@ are also supported — just tack an `.md` extension on the end:
           fs.outputFileSync destination(source), html
         }
       
+
+Configuration
+
+Default configuration **options**. All of these may be extended by
+user-specified options.
+
         def defaults = [
           layout:     'parallel',
           output:     'docs',
@@ -889,11 +1003,21 @@ are also supported — just tack an `.md` extension on the end:
           marked:     null
         ]
       
+
+**Configure** this particular run of Docco. We might use a passed-in external
+template, or one of the built-in **layouts**. We only attempt to process
+source files for languages for which we have definitions.
+
         def configure(options) {
           def config = _.extend([:], defaults, _.pick(options.opts(), _.keys(defaults)))
       
           config.languages = buildMatchers config.languages
       
+The user is able to override the layout file used with the `--template` parameter.
+In this case, it is also neccessary to explicitly specify a stylesheet file.
+These custom templates are compiled exactly like the predefined ones, but the `public` folder
+is only copied for the latter.
+
           if (options.template) {
             if (!options.css) {
               log.info "docco: no stylesheet file specified"
@@ -924,16 +1048,35 @@ are also supported — just tack an `.md` extension on the end:
           config
         }
       
+
+Languages are stored in JSON in the file `resources/languages.json`.
+Each item maps the file extension to the name of the language and the
+`symbol` that indicates a line comment. To enroll a new programming
+language to Docco, just add it to the file.
+
         def languages = JSON.parse fs.readFileSync(path.join(__dirname, 'resources', 'languages.json'))
       
+
+Build out the appropriate matchers and delimiters for each language.
+
         def buildMatchers(languages) {
           languages.each { ext, l ->
+
+Does the line begin with a comment?
+
             l.commentMatcher = ~/^\s*${l.symbol}\s?/
+
+Ignore [hashbangs](http://en.wikipedia.org/wiki/Shebang_%28Unix%29) and interpolations...
+
             l.commentFilter = $/(^#![/]|^\s*#\${'{'})/$
           }
           languages
         }
       
+
+A function to get the current language we're documenting, based on the
+file extension. Detect and tag "literate" `.ext.md` variants.
+
         def getLanguage(source, config) {
           def ext  = config.extension ?: path.extname(source) ?: path.basename(source)
           def lang = config.languages?[ext] ?: languages[ext]
@@ -947,8 +1090,17 @@ are also supported — just tack an `.md` extension on the end:
           lang
         }
       
+
+Keep it DRY. Extract the docco **version** from `package.json`
+
         def version = JSON.parse(fs.readFileSync(path.join(__dirname, 'package.json'))).version
       
+
+Command Line Interface
+
+Finally, let's define the interface to run Docco from the command line.
+Parse options using [CliBuilder](https://joshdurbin.net/posts/2020-3-groovy-clibuilder/).
+
         def run(args = args) {
           def c = defaults
           commander.version(version)
