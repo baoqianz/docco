@@ -2,6 +2,6 @@
 $basedir=Split-Path $MyInvocation.MyCommand.Definition -Parent
 
 $ret=0
-groovy "$basedir/../docco.gy" $args
+groovy "$basedir/../docco.groovy" $args
 $ret=$LASTEXITCODE
 exit $ret

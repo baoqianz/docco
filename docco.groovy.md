@@ -10,7 +10,7 @@ code. All prose is passed through
 passed through [Highlight.js](https://github.com/Sayi/Highlight.java)
 syntax highlighting.
 This page is the result of running Docco against its own
-[source file](https://github.com/baoqianz/docco/blob/master/docco.gy.md).
+[source file](https://github.com/baoqianz/docco/blob/master/docco.groovy.md).
 
 1. Make sure [Java 11](https://community.chocolatey.org/packages/Temurin11)+
 and [Groovy 3](https://community.chocolatey.org/packages/groovy)+
@@ -20,7 +20,7 @@ are installed on your system
 
 2. Download the [Docco release](https://github.com/baoqianz/docco/releases/download/0.9.1/release.zip) and unzip it
 
-3. Run it against your code: `groovy docco.gy src/*.groovy`
+3. Run it against your code: `groovy docco.groovy src/*.groovy`
 
 This will generate an HTML page for each of the named source files,
 with a menu linking to the other pages, saving the whole mess
@@ -1104,7 +1104,7 @@ Parse options using [CliBuilder](https://joshdurbin.net/posts/2020-3-groovy-clib
         def run(args = args) {
           def c = defaults
           commander.version(version)
-            .usage('groovy docco.gy [options] files')
+            .usage('groovy docco.groovy [options] files')
             .option('-L, --languages [file]', 'use a custom languages.json', _.compose(JSON.&parse, fs.&readFileSync))
             .option('-l, --layout [name]',    'choose a layout (parallel, linear or classic)', c.layout)
             .option('-o, --output [path]',    'output to a given folder', c.output)

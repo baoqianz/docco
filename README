@@ -33,7 +33,7 @@ Installation:
 
     https://github.com/baoqianz/docco/releases/download/0.9.1/release.zip
 
-Usage: groovy docco.gy [options] files
+Usage: groovy docco.groovy [options] files
 
     Options:
      -c,--css <file>         use a custom css file

@@ -33,7 +33,7 @@ code. All prose is passed through
 passed through <a href="https://github.com/Sayi/Highlight.java">Highlight.js</a>
 syntax highlighting.
 This page is the result of running Docco against its own
-<a href="https://github.com/baoqianz/docco/blob/master/docco.gy.md">source file</a>.</p>
+<a href="https://github.com/baoqianz/docco/blob/master/docco.groovy.md">source file</a>.</p>
 <ol>
 <li>
 <p>Make sure <a href="https://community.chocolatey.org/packages/Temurin11">Java 11</a>+
@@ -46,7 +46,7 @@ are installed on your system<br />
 <p>Download the <a href="https://github.com/baoqianz/docco/releases/download/0.9.1/release.zip">Docco release</a> and unzip it</p>
 </li>
 <li>
-<p>Run it against your code: <code>groovy docco.gy src/*.groovy</code></p>
+<p>Run it against your code: <code>groovy docco.groovy src/*.groovy</code></p>
 </li>
 </ol>
 <p>This will generate an HTML page for each of the named source files,
@@ -1235,7 +1235,7 @@ Parse options using <a href="https://joshdurbin.net/posts/2020-3-groovy-clibuild
           <div class='highlight'><pre>    <span class="hljs-keyword">def</span> run(args = args) {
       <span class="hljs-keyword">def</span> c = defaults
       commander.version(version)
-        .usage(<span class="hljs-string">'groovy docco.gy [options] files'</span>)
+        .usage(<span class="hljs-string">'groovy docco.groovy [options] files'</span>)
         .option(<span class="hljs-string">'-L, --languages [file]'</span>, <span class="hljs-string">'use a custom languages.json'</span>, _.compose(JSON.&amp;parse, fs.&amp;readFileSync))
         .option(<span class="hljs-string">'-l, --layout [name]'</span>,    <span class="hljs-string">'choose a layout (parallel, linear or classic)'</span>, c.layout)
         .option(<span class="hljs-string">'-o, --output [path]'</span>,    <span class="hljs-string">'output to a given folder'</span>, c.output)

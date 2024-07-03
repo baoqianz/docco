@@ -23,7 +23,7 @@
     "org.commonmark:commonmark": "~ 0.22.0",
     "com.deepoove:codehighlight": "~ 1.0.3"
   },
-  "main": "./docco.gy",
+  "main": "./docco.groovy",
   "bin": {
     "docco": "./bin/docco.ps1"
   }

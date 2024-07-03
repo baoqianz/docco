@@ -918,7 +918,7 @@ class DoccoMain extends Script {
     def run(args = args) {
       def c = defaults
       commander.version(version)
-        .usage('groovy docco.gy [options] files')
+        .usage('groovy docco.groovy [options] files')
         .option('-L, --languages [file]', 'use a custom languages.json', _.compose(JSON.&parse, fs.&readFileSync))
         .option('-l, --layout [name]',    'choose a layout (parallel, linear or classic)', c.layout)
         .option('-o, --output [path]',    'output to a given folder', c.output)
