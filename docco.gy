@@ -541,7 +541,7 @@ class DoccoMain extends Script {
     }
   }
   
-  class UnderScore {
+  class Underscore {
     def t = new StreamingTemplateEngine()
     def find(list, Closure predicate) {
       list.find predicate
@@ -688,7 +688,7 @@ class DoccoMain extends Script {
   @Log
   class Docco {
     def __dirname = new File("").getAbsolutePath()
-    def _ = new UnderScore()
+    def _ = new Underscore()
     def JSON = new Json()
     def fs   = new FS()
     def path = new Path()
@@ -748,32 +748,35 @@ class DoccoMain extends Script {
       if (lang.literate) {
         def isText = true, maybeCode = true
         def match
-        lines.eachWithIndex { line, i ->
-          lines[i] = {switch (true) {
+        for (def line in lines) {
+          switch (true) {
             case maybeCode && (match = line =~ /^([ ]{4}|[ ]{0,3}\t)/):
-              isText = false
-              line.substring(match[0][1].size())
+              isText  = false
+              hasCode = true
+              codeText += line.substring(match[0][1].size()) + '\n'
               break
             case maybeCode = line ==~ /^\s*$/:
-              isText ? lang.symbol : ""
+              isText ? (docsText += '\n') : (codeText += '\n')
               break
             default:
               isText = true
-              lang.symbol + ' ' + line
-          }}()
+              if (hasCode) save()
+              docsText += line + '\n'
+              if (line ==~ /^(---+|===+)$/) save()
+          }
         }
-      }
-  
-      for (def line in lines) {
-        switch (true) {
-          case line =~ lang.commentMatcher && !(line =~ lang.commentFilter):
-            if (hasCode) save()
-            docsText += (line = line.replaceFirst(lang.commentMatcher, '')) + '\n'
-            if (line ==~ /^(---+|===+)$/) save()
-            break
-          default:
-            hasCode = true
-            codeText += line + '\n'
+      } else {
+        for (def line in lines) {
+          switch (true) {
+            case line =~ lang.commentMatcher && !(line =~ lang.commentFilter):
+              if (hasCode) save()
+              docsText += (line = line.replaceFirst(lang.commentMatcher, '')) + '  \n'
+              if (line ==~ /^(---+|===+)$/) save()
+              break
+            default:
+              hasCode = true
+              codeText += line + '\n'
+          }
         }
       }
       save()
