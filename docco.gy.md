@@ -552,7 +552,7 @@ Path
         }
       
         def join(base, sub) {
-          new File(base, sub).toPath().normalize().toFile().getPath()
+          new File(base, sub).toPath().normalize().toFile().getPath() ?: "."
         }
       
         def join(String... paths) {
