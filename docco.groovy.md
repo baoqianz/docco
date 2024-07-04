@@ -78,7 +78,7 @@ The Groovy Script & Main Function
 
     class DoccoMain extends Script {
 
-main()
+Main
 
       static void main(String[] args) {
         InvokerHelper.runScript(DoccoMain.class, args)
@@ -118,7 +118,354 @@ Public API
           thisScript: this,
         ]
       }
+      
+
+Docco (Business Logics Follow)
+------------------------------
+
+      @Log
+      class Docco {
+
+
+Helpers & Initial Setup
+
+        def __dirname = new File("").getAbsolutePath()
+        def _ = new Underscore()
+        def JSON = new Json()
+        def fs   = new FS()
+        def path = new Path()
+        def highlightjs = new HighlightJS()
+        def marked = new CommonMark()
+        def commander = new Commander()
+      
+
+Main Documentation Generation Functions
+
+Generate the documentation for our configured source file by copying over static
+assets, reading all the source files in, splitting them up into prose+code
+sections, highlighting each file in the appropriate language, and printing them
+out in an HTML template.
+
+        def document(options = [:], k = null) {
+          def config = configure options
+      
+          fs.mkdirs(config.output) { ->
+      
+            k ?= { error -> if (error) throw error }
+            def copyAsset = { file, k0 ->
+              if (!fs.existsSync(file)) return k0()
+              fs.copy file, path.join(config.output, path.basename(file)), k0
+            }
+            def complete  = { ->
+              copyAsset(config.css) { error ->
+                if (error) return k(error)
+                if (fs.existsSync(config.public)) return copyAsset(config.public, k)
+                k()
+              }
+            }
+      
+            def files = config.sources.collect()
+      
+            def nextFile
+            if (true) nextFile = { ->
+              def source = files.pop()
+              fs.readFile(source) { error, buffer ->
+                if (error) return k(error)
+      
+                def code = buffer.toString().replaceAll('\r\n', '\n')
+                def sections = parse source, code, config
+                format source, sections, config
+                write source, sections, config
+                files.size() ? nextFile() : complete()
+              }
+            }
+      
+            if (files.size()) nextFile()
+          }
+        }
+      
+
+Given a string of source code, **parse** out each block of prose and the code that
+follows it — by detecting which is which, line by line — and then create an
+individual **section** for it. Each section is an object with `docsText` and
+`codeText` properties, and eventually `docsHtml` and `codeHtml` as well.
+
+        def parse(source, code, config = [:]) {
+          def lines    = code.split "\n"
+          def sections = []
+          def lang     = getLanguage source, config
+          def hasCode  = '', docsText = '', codeText = ''
+      
+          def save = { ->
+            sections.add([docsText: docsText, codeText: codeText])
+            hasCode = docsText = codeText = ''
+          }
+      
+Our quick-and-dirty implementation of the literate programming style. Simply
+invert the prose and code relationship on a per-line basis, and then continue as
+normal below.
+
+          if (lang.literate) {
+            def isText = true, maybeCode = true
+            def match
+            for (def line in lines) {
+              switch (true) {
+                case maybeCode && (match = line =~ /^([ ]{4}|[ ]{0,3}\t)/):
+                  isText  = false
+                  hasCode = true
+                  codeText += line.substring(match[0][1].size()) + '\n'
+                  break
+                case maybeCode = line ==~ /^\s*$/:
+                  isText ? (docsText += '\n') : (codeText += '\n')
+                  break
+                default:
+                  isText = true
+                  if (hasCode) save()
+                  docsText += line + '\n'
+                  if (line ==~ /^(---+|===+)$/) save()
+              }
+            }
+          } else {
+            for (def line in lines) {
+              switch (true) {
+                case line =~ lang.commentMatcher && !(line =~ lang.commentFilter):
+                  if (hasCode) save()
+                  docsText += (line = line.replaceFirst(lang.commentMatcher, '')) + '  \n'
+                  if (line ==~ /^(---+|===+)$/) save()
+                  break
+                default:
+                  hasCode = true
+                  codeText += line + '\n'
+              }
+            }
+          }
+          save()
+      
+          sections
+        }
+      
+
+To **format** and highlight the now-parsed sections of code, we use **Highlight.js**
+over stdio, and run the text of their corresponding comments through
+**Markdown**, using [CommonMark](https://github.com/commonmark/commonmark-java).
+
+        def format(source, sections, config) {
+          def language      = getLanguage source, config
+          def markedOptions = [smartypants: true]
+      
+          if (config.marked) {
+            markedOptions = config.marked
+          }
+      
+          marked.setOptions markedOptions
+          marked.setOptions([
+            highlight: { code, lang ->
+              lang ?= language.name
+        
+              if (highlightjs.getLanguage(lang)) {
+                highlightjs.highlight(code, [language: lang]).value
+              } else {
+                log.info "docco: couldn't highlight code block with unknown language '#{lang}' in #{source}"
+                code
+              }
+            }
+          ])
+      
+          for (def section in sections) {
+            def code
+            code = highlightjs.highlight(section.codeText, [language: language.name]).value
+            code = code.replaceFirst(/\s+$/, '')
+            section.codeHtml = "<div class='highlight'><pre>${code}</pre></div>"
+            section.docsHtml = marked.apply(section.docsText)
+          }
+        }
+      
+
+Once all of the code has finished highlighting, we can **write** the resulting
+documentation file by passing the completed HTML sections into the template,
+and rendering it to the specified output path.
+
+        def write(source, sections, config) {
+          def first
+      
+          def destination = { file ->
+            path.join(config.output, path.dirname(file), path.basename(file, path.extname(file)) + '.html')
+          }
+      
+          def relative = { file ->
+            def to = path.dirname(path.resolve(file))
+            def from = path.dirname(path.resolve(destination(source)))
+            path.join(path.relative(from, to), path.basename(file))
+          }
+      
+The **title** of the file is either the first heading in the prose, or the
+name of the source file.
+
+          def firstSection = _.find sections, { section ->
+            section.docsText.size() > 0
+          }
+          if (firstSection) first = marked.lexer(firstSection.docsText).firstChild
+          def hasTitle = first && "$first.class" == "class org.commonmark.node.Heading" && first.level == 1
+          def title = hasTitle ? first.firstChild.literal : path.basename(source)
+          def css = relative path.join(config.output, path.basename(config.css))
+      
+          def html = config.template([
+            sources: config.sources, css: css, title: title, hasTitle: hasTitle,
+            sections: sections, path: path, destination: destination, relative: relative
+          ])
+      
+          println "docco: ${source} -> ${destination source}"
+          fs.outputFileSync destination(source), html
+        }
+      
+
+Configuration
+
+Default configuration **options**. All of these may be extended by
+user-specified options.
+
+        def defaults = [
+          layout:     'parallel',
+          output:     'docs',
+          template:   null,
+          css:        null,
+          extension:  null,
+          languages:  [:],
+          marked:     null
+        ]
+      
+
+**Configure** this particular run of Docco. We might use a passed-in external
+template, or one of the built-in **layouts**. We only attempt to process
+source files for languages for which we have definitions.
+
+        def configure(options) {
+          def config = _.extend([:], defaults, _.pick(options.opts(), _.keys(defaults)))
+      
+          config.languages = buildMatchers config.languages
+      
+The user is able to override the layout file used with the `--template` parameter.
+In this case, it is also neccessary to explicitly specify a stylesheet file.
+These custom templates are compiled exactly like the predefined ones, but the `public` folder
+is only copied for the latter.
+
+          if (options.template) {
+            if (!options.css) {
+              log.info "docco: no stylesheet file specified"
+            }
+            config.layout = null
+          } else {
+            def dir = config.layout = path.join __dirname, 'resources', config.layout
+            if (fs.existsSync(path.join dir, 'public')) {
+              config.public         = path.join dir, 'public'
+            }
+            config.template         = path.join dir, 'docco.jst'
+            config.css              = options.css ?: path.join(dir, 'docco.css')
+          }
+          config.template = _.template fs.readFileSync(config.template)
+      
+          if (options.marked) {
+            config.marked = JSON.parse fs.readFileSync(options.marked)
+          }
+      
+          config.sources = options.args.filter({ source ->
+            def lang = getLanguage source, config
+            if (!lang) {
+              log.info "docco: skipped unknown type (${path.basename source})"
+            }
+            lang
+          }).sort()
+      
+          config
+        }
+      
+
+Languages are stored in JSON in the file `resources/languages.json`.
+Each item maps the file extension to the name of the language and the
+`symbol` that indicates a line comment. To enroll a new programming
+language to Docco, just add it to the file.
+
+        def languages = JSON.parse fs.readFileSync(path.join(__dirname, 'resources', 'languages.json'))
+      
+
+Build out the appropriate matchers and delimiters for each language.
+
+        def buildMatchers(languages) {
+          languages.each { ext, l ->
+
+Does the line begin with a comment?
+
+            l.commentMatcher = ~/^\s*${l.symbol}\s?/
+
+Ignore [hashbangs](http://en.wikipedia.org/wiki/Shebang_%28Unix%29) and interpolations...
+
+            l.commentFilter = $/(^#![/]|^\s*#\${'{'})/$
+          }
+          languages
+        }
+      
+
+A function to get the current language we're documenting, based on the
+file extension. Detect and tag "literate" `.ext.md` variants.
+
+        def getLanguage(source, config) {
+          def ext  = config.extension ?: path.extname(source) ?: path.basename(source)
+          def lang = config.languages?[ext] ?: languages[ext]
+          if (lang && lang.name == 'markdown') {
+            def codeExt  = path.extname(path.basename(source, ext))
+            def codeLang = config.languages?[codeExt] ?: languages[codeExt]
+            if (codeExt && codeLang) {
+              lang = _.extend([:], codeLang, [literate: true])
+            }
+          }
+          lang
+        }
+      
+
+Keep it DRY. Extract the docco **version** from `package.json`
+
+        def version = JSON.parse(fs.readFileSync(path.join(__dirname, 'package.json'))).version
+      
+
+Command Line Interface
+
+Finally, let's define the interface to run Docco from the command line.
+Parse options using [CliBuilder](https://joshdurbin.net/posts/2020-3-groovy-clibuilder/).
+
+        def run(args = args) {
+          def c = defaults
+          commander.version(version)
+            .usage('groovy docco.groovy [options] files')
+            .option('-L, --languages [file]', 'use a custom languages.json', _.compose(JSON.&parse, fs.&readFileSync))
+            .option('-l, --layout [name]',    'choose a layout (parallel, linear or classic)', c.layout)
+            .option('-o, --output [path]',    'output to a given folder', c.output)
+            .option('-c, --css [file]',       'use a custom css file', c.css)
+            .option('-t, --template [file]',  'use a custom .jst template', c.template)
+            .option('-e, --extension [ext]',  'assume a file extension for all inputs', c.extension)
+            .option('-m, --marked [file]',    'use custom marked options', c.marked)
+            .parse(args)
+          if (commander.args.length) {
+            document commander
+          } else {
+            commander.usage()
+          }
+        }
     
+        def args
+      
+        Docco(Map context) {
+          commander._ = _
+          fs.path     = path
+          fs.tasks    = context.tasks
+          args        = context.args
+          languages   = buildMatchers languages
+        }
+      }
+    
+
+Helper Classes Follow
+---------------------
+==========================
 
 Code Highlight Patch
 --------------------
@@ -786,349 +1133,6 @@ Commander
         }
       
         def _
-      }
-      
-
-Docco (Business Logics Follow)
-------------------------------
-
-      @Log
-      class Docco {
-
-
-Helpers & Initial Setup
-
-        def __dirname = new File("").getAbsolutePath()
-        def _ = new Underscore()
-        def JSON = new Json()
-        def fs   = new FS()
-        def path = new Path()
-        def highlightjs = new HighlightJS()
-        def marked = new CommonMark()
-        def commander = new Commander()
-      
-
-Main Documentation Generation Functions
-
-Generate the documentation for our configured source file by copying over static
-assets, reading all the source files in, splitting them up into prose+code
-sections, highlighting each file in the appropriate language, and printing them
-out in an HTML template.
-
-        def document(options = [:], k = null) {
-          def config = configure options
-      
-          fs.mkdirs(config.output) { ->
-      
-            k ?= { error -> if (error) throw error }
-            def copyAsset = { file, k0 ->
-              if (!fs.existsSync(file)) return k0()
-              fs.copy file, path.join(config.output, path.basename(file)), k0
-            }
-            def complete  = { ->
-              copyAsset(config.css) { error ->
-                if (error) return k(error)
-                if (fs.existsSync(config.public)) return copyAsset(config.public, k)
-                k()
-              }
-            }
-      
-            def files = config.sources.collect()
-      
-            def nextFile
-            if (true) nextFile = { ->
-              def source = files.pop()
-              fs.readFile(source) { error, buffer ->
-                if (error) return k(error)
-      
-                def code = buffer.toString().replaceAll('\r\n', '\n')
-                def sections = parse source, code, config
-                format source, sections, config
-                write source, sections, config
-                files.size() ? nextFile() : complete()
-              }
-            }
-      
-            if (files.size()) nextFile()
-          }
-        }
-      
-
-Given a string of source code, **parse** out each block of prose and the code that
-follows it — by detecting which is which, line by line — and then create an
-individual **section** for it. Each section is an object with `docsText` and
-`codeText` properties, and eventually `docsHtml` and `codeHtml` as well.
-
-        def parse(source, code, config = [:]) {
-          def lines    = code.split "\n"
-          def sections = []
-          def lang     = getLanguage source, config
-          def hasCode  = '', docsText = '', codeText = ''
-      
-          def save = { ->
-            sections.add([docsText: docsText, codeText: codeText])
-            hasCode = docsText = codeText = ''
-          }
-      
-Our quick-and-dirty implementation of the literate programming style. Simply
-invert the prose and code relationship on a per-line basis, and then continue as
-normal below.
-
-          if (lang.literate) {
-            def isText = true, maybeCode = true
-            def match
-            for (def line in lines) {
-              switch (true) {
-                case maybeCode && (match = line =~ /^([ ]{4}|[ ]{0,3}\t)/):
-                  isText  = false
-                  hasCode = true
-                  codeText += line.substring(match[0][1].size()) + '\n'
-                  break
-                case maybeCode = line ==~ /^\s*$/:
-                  isText ? (docsText += '\n') : (codeText += '\n')
-                  break
-                default:
-                  isText = true
-                  if (hasCode) save()
-                  docsText += line + '\n'
-                  if (line ==~ /^(---+|===+)$/) save()
-              }
-            }
-          } else {
-            for (def line in lines) {
-              switch (true) {
-                case line =~ lang.commentMatcher && !(line =~ lang.commentFilter):
-                  if (hasCode) save()
-                  docsText += (line = line.replaceFirst(lang.commentMatcher, '')) + '  \n'
-                  if (line ==~ /^(---+|===+)$/) save()
-                  break
-                default:
-                  hasCode = true
-                  codeText += line + '\n'
-              }
-            }
-          }
-          save()
-      
-          sections
-        }
-      
-
-To **format** and highlight the now-parsed sections of code, we use **Highlight.js**
-over stdio, and run the text of their corresponding comments through
-**Markdown**, using [CommonMark](https://github.com/commonmark/commonmark-java).
-
-        def format(source, sections, config) {
-          def language      = getLanguage source, config
-          def markedOptions = [smartypants: true]
-      
-          if (config.marked) {
-            markedOptions = config.marked
-          }
-      
-          marked.setOptions markedOptions
-          marked.setOptions([
-            highlight: { code, lang ->
-              lang ?= language.name
-        
-              if (highlightjs.getLanguage(lang)) {
-                highlightjs.highlight(code, [language: lang]).value
-              } else {
-                log.info "docco: couldn't highlight code block with unknown language '#{lang}' in #{source}"
-                code
-              }
-            }
-          ])
-      
-          for (def section in sections) {
-            def code
-            code = highlightjs.highlight(section.codeText, [language: language.name]).value
-            code = code.replaceFirst(/\s+$/, '')
-            section.codeHtml = "<div class='highlight'><pre>${code}</pre></div>"
-            section.docsHtml = marked.apply(section.docsText)
-          }
-        }
-      
-
-Once all of the code has finished highlighting, we can **write** the resulting
-documentation file by passing the completed HTML sections into the template,
-and rendering it to the specified output path.
-
-        def write(source, sections, config) {
-          def first
-      
-          def destination = { file ->
-            path.join(config.output, path.dirname(file), path.basename(file, path.extname(file)) + '.html')
-          }
-      
-          def relative = { file ->
-            def to = path.dirname(path.resolve(file))
-            def from = path.dirname(path.resolve(destination(source)))
-            path.join(path.relative(from, to), path.basename(file))
-          }
-      
-The **title** of the file is either the first heading in the prose, or the
-name of the source file.
-
-          def firstSection = _.find sections, { section ->
-            section.docsText.size() > 0
-          }
-          if (firstSection) first = marked.lexer(firstSection.docsText).firstChild
-          def hasTitle = first && "$first.class" == "class org.commonmark.node.Heading" && first.level == 1
-          def title = hasTitle ? first.firstChild.literal : path.basename(source)
-          def css = relative path.join(config.output, path.basename(config.css))
-      
-          def html = config.template([
-            sources: config.sources, css: css, title: title, hasTitle: hasTitle,
-            sections: sections, path: path, destination: destination, relative: relative
-          ])
-      
-          println "docco: ${source} -> ${destination source}"
-          fs.outputFileSync destination(source), html
-        }
-      
-
-Configuration
-
-Default configuration **options**. All of these may be extended by
-user-specified options.
-
-        def defaults = [
-          layout:     'parallel',
-          output:     'docs',
-          template:   null,
-          css:        null,
-          extension:  null,
-          languages:  [:],
-          marked:     null
-        ]
-      
-
-**Configure** this particular run of Docco. We might use a passed-in external
-template, or one of the built-in **layouts**. We only attempt to process
-source files for languages for which we have definitions.
-
-        def configure(options) {
-          def config = _.extend([:], defaults, _.pick(options.opts(), _.keys(defaults)))
-      
-          config.languages = buildMatchers config.languages
-      
-The user is able to override the layout file used with the `--template` parameter.
-In this case, it is also neccessary to explicitly specify a stylesheet file.
-These custom templates are compiled exactly like the predefined ones, but the `public` folder
-is only copied for the latter.
-
-          if (options.template) {
-            if (!options.css) {
-              log.info "docco: no stylesheet file specified"
-            }
-            config.layout = null
-          } else {
-            def dir = config.layout = path.join __dirname, 'resources', config.layout
-            if (fs.existsSync(path.join dir, 'public')) {
-              config.public         = path.join dir, 'public'
-            }
-            config.template         = path.join dir, 'docco.jst'
-            config.css              = options.css ?: path.join(dir, 'docco.css')
-          }
-          config.template = _.template fs.readFileSync(config.template)
-      
-          if (options.marked) {
-            config.marked = JSON.parse fs.readFileSync(options.marked)
-          }
-      
-          config.sources = options.args.filter({ source ->
-            def lang = getLanguage source, config
-            if (!lang) {
-              log.info "docco: skipped unknown type (${path.basename source})"
-            }
-            lang
-          }).sort()
-      
-          config
-        }
-      
-
-Languages are stored in JSON in the file `resources/languages.json`.
-Each item maps the file extension to the name of the language and the
-`symbol` that indicates a line comment. To enroll a new programming
-language to Docco, just add it to the file.
-
-        def languages = JSON.parse fs.readFileSync(path.join(__dirname, 'resources', 'languages.json'))
-      
-
-Build out the appropriate matchers and delimiters for each language.
-
-        def buildMatchers(languages) {
-          languages.each { ext, l ->
-
-Does the line begin with a comment?
-
-            l.commentMatcher = ~/^\s*${l.symbol}\s?/
-
-Ignore [hashbangs](http://en.wikipedia.org/wiki/Shebang_%28Unix%29) and interpolations...
-
-            l.commentFilter = $/(^#![/]|^\s*#\${'{'})/$
-          }
-          languages
-        }
-      
-
-A function to get the current language we're documenting, based on the
-file extension. Detect and tag "literate" `.ext.md` variants.
-
-        def getLanguage(source, config) {
-          def ext  = config.extension ?: path.extname(source) ?: path.basename(source)
-          def lang = config.languages?[ext] ?: languages[ext]
-          if (lang && lang.name == 'markdown') {
-            def codeExt  = path.extname(path.basename(source, ext))
-            def codeLang = config.languages?[codeExt] ?: languages[codeExt]
-            if (codeExt && codeLang) {
-              lang = _.extend([:], codeLang, [literate: true])
-            }
-          }
-          lang
-        }
-      
-
-Keep it DRY. Extract the docco **version** from `package.json`
-
-        def version = JSON.parse(fs.readFileSync(path.join(__dirname, 'package.json'))).version
-      
-
-Command Line Interface
-
-Finally, let's define the interface to run Docco from the command line.
-Parse options using [CliBuilder](https://joshdurbin.net/posts/2020-3-groovy-clibuilder/).
-
-        def run(args = args) {
-          def c = defaults
-          commander.version(version)
-            .usage('groovy docco.groovy [options] files')
-            .option('-L, --languages [file]', 'use a custom languages.json', _.compose(JSON.&parse, fs.&readFileSync))
-            .option('-l, --layout [name]',    'choose a layout (parallel, linear or classic)', c.layout)
-            .option('-o, --output [path]',    'output to a given folder', c.output)
-            .option('-c, --css [file]',       'use a custom css file', c.css)
-            .option('-t, --template [file]',  'use a custom .jst template', c.template)
-            .option('-e, --extension [ext]',  'assume a file extension for all inputs', c.extension)
-            .option('-m, --marked [file]',    'use custom marked options', c.marked)
-            .parse(args)
-          if (commander.args.length) {
-            document commander
-          } else {
-            commander.usage()
-          }
-        }
-    
-        def args
-      
-        Docco(Map context) {
-          commander._ = _
-          fs.path     = path
-          fs.tasks    = context.tasks
-          args        = context.args
-          languages   = buildMatchers languages
-        }
       }
     
       DoccoMain(Binding context) {

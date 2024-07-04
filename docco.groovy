@@ -59,6 +59,266 @@ class DoccoMain extends Script {
       thisScript: this,
     ]
   }
+  
+  @Log
+  class Docco {
+    def __dirname = new File("").getAbsolutePath()
+    def _ = new Underscore()
+    def JSON = new Json()
+    def fs   = new FS()
+    def path = new Path()
+    def highlightjs = new HighlightJS()
+    def marked = new CommonMark()
+    def commander = new Commander()
+  
+    def document(options = [:], k = null) {
+      def config = configure options
+  
+      fs.mkdirs(config.output) { ->
+  
+        k ?= { error -> if (error) throw error }
+        def copyAsset = { file, k0 ->
+  	if (!fs.existsSync(file)) return k0()
+          fs.copy file, path.join(config.output, path.basename(file)), k0
+        }
+        def complete  = { ->
+          copyAsset(config.css) { error ->
+            if (error) return k(error)
+            if (fs.existsSync(config.public)) return copyAsset(config.public, k)
+            k()
+          }
+        }
+  
+        def files = config.sources.collect()
+  
+        def nextFile
+       	if (true) nextFile = { ->
+          def source = files.pop()
+          fs.readFile(source) { error, buffer ->
+            if (error) return k(error)
+
+            def code = buffer.toString().replaceAll('\r\n', '\n')
+            def sections = parse source, code, config
+            format source, sections, config
+            write source, sections, config
+            files.size() ? nextFile() : complete()
+          }
+        }
+  
+        if (files.size()) nextFile()
+      }
+    }
+  
+    def parse(source, code, config = [:]) {
+      def lines    = code.split "\n"
+      def sections = []
+      def lang     = getLanguage source, config
+      def hasCode  = '', docsText = '', codeText = ''
+  
+      def save = { ->
+        sections.add([docsText: docsText, codeText: codeText])
+        hasCode = docsText = codeText = ''
+      }
+  
+      if (lang.literate) {
+        def isText = true, maybeCode = true
+        def match
+        for (def line in lines) {
+          switch (true) {
+            case maybeCode && (match = line =~ /^([ ]{4}|[ ]{0,3}\t)/):
+              isText  = false
+              hasCode = true
+              codeText += line.substring(match[0][1].size()) + '\n'
+              break
+            case maybeCode = line ==~ /^\s*$/:
+              isText ? (docsText += '\n') : (codeText += '\n')
+              break
+            default:
+              isText = true
+              if (hasCode) save()
+              docsText += line + '\n'
+              if (line ==~ /^(---+|===+)$/) save()
+          }
+        }
+      } else {
+        for (def line in lines) {
+          switch (true) {
+            case line =~ lang.commentMatcher && !(line =~ lang.commentFilter):
+              if (hasCode) save()
+              docsText += (line = line.replaceFirst(lang.commentMatcher, '')) + '  \n'
+              if (line ==~ /^(---+|===+)$/) save()
+              break
+            default:
+              hasCode = true
+              codeText += line + '\n'
+          }
+        }
+      }
+      save()
+  
+      sections
+    }
+  
+    def format(source, sections, config) {
+      def language      = getLanguage source, config
+      def markedOptions = [smartypants: true]
+  
+      if (config.marked) {
+        markedOptions = config.marked
+      }
+  
+      marked.setOptions markedOptions
+      marked.setOptions([
+        highlight: { code, lang ->
+          lang ?= language.name
+    
+          if (highlightjs.getLanguage(lang)) {
+            highlightjs.highlight(code, [language: lang]).value
+          } else {
+            log.info "docco: couldn't highlight code block with unknown language '#{lang}' in #{source}"
+            code
+          }
+        }
+      ])
+  
+      for (def section in sections) {
+        def code
+        code = highlightjs.highlight(section.codeText, [language: language.name]).value
+        code = code.replaceFirst(/\s+$/, '')
+        section.codeHtml = "<div class='highlight'><pre>${code}</pre></div>"
+        section.docsHtml = marked.apply(section.docsText)
+      }
+    }
+
+    def write(source, sections, config) {
+      def first
+  
+      def destination = { file ->
+        path.join(config.output, path.dirname(file), path.basename(file, path.extname(file)) + '.html')
+      }
+  
+      def relative = { file ->
+        def to = path.dirname(path.resolve(file))
+        def from = path.dirname(path.resolve(destination(source)))
+        path.join(path.relative(from, to), path.basename(file))
+      }
+  
+      def firstSection = _.find sections, { section ->
+        section.docsText.size() > 0
+      }
+      if (firstSection) first = marked.lexer(firstSection.docsText).firstChild
+      def hasTitle = first && "$first.class" == "class org.commonmark.node.Heading" && first.level == 1
+      def title = hasTitle ? first.firstChild.literal : path.basename(source)
+      def css = relative path.join(config.output, path.basename(config.css))
+  
+      def html = config.template([
+        sources: config.sources, css: css, title: title, hasTitle: hasTitle,
+        sections: sections, path: path, destination: destination, relative: relative
+      ])
+  
+      println "docco: ${source} -> ${destination source}"
+      fs.outputFileSync destination(source), html
+    }
+  
+    def defaults = [
+      layout:     'parallel',
+      output:     'docs',
+      template:   null,
+      css:        null,
+      extension:  null,
+      languages:  [:],
+      marked:     null
+    ]
+  
+    def configure(options) {
+      def config = _.extend([:], defaults, _.pick(options.opts(), _.keys(defaults)))
+  
+      config.languages = buildMatchers config.languages
+  
+      if (options.template) {
+        if (!options.css) {
+          log.info "docco: no stylesheet file specified"
+        }
+        config.layout = null
+      } else {
+        def dir = config.layout = path.join __dirname, 'resources', config.layout
+        if (fs.existsSync(path.join dir, 'public')) {
+          config.public         = path.join dir, 'public'
+        } 
+        config.template         = path.join dir, 'docco.jst'
+        config.css              = options.css ?: path.join(dir, 'docco.css')
+      }
+      config.template = _.template fs.readFileSync(config.template)
+  
+      if (options.marked) {
+        config.marked = JSON.parse fs.readFileSync(options.marked)
+      }
+  
+      config.sources = options.args.filter({ source ->
+        def lang = getLanguage source, config
+        if (!lang) {
+          log.info "docco: skipped unknown type (${path.basename source})"
+        }
+        lang
+      }).sort()
+
+      config
+    }
+  
+    def languages = JSON.parse fs.readFileSync(path.join(__dirname, 'resources', 'languages.json'))
+  
+    def buildMatchers(languages) {
+      languages.each { ext, l ->
+        l.commentMatcher = ~/^\s*${l.symbol}\s?/
+        l.commentFilter = $/(^#![/]|^\s*#\${'{'})/$
+      }
+      languages
+    }
+  
+    def getLanguage(source, config) {
+      def ext  = config.extension ?: path.extname(source) ?: path.basename(source)
+      def lang = config.languages?[ext] ?: languages[ext]
+      if (lang && lang.name == 'markdown') {
+        def codeExt  = path.extname(path.basename(source, ext))
+        def codeLang = config.languages?[codeExt] ?: languages[codeExt]
+        if (codeExt && codeLang) {
+          lang = _.extend([:], codeLang, [literate: true])
+        }
+      }
+      lang
+    }
+  
+    def version = JSON.parse(fs.readFileSync(path.join(__dirname, 'package.json'))).version
+  
+    def run(args = args) {
+      def c = defaults
+      commander.version(version)
+        .usage('groovy docco.groovy [options] files')
+        .option('-L, --languages [file]', 'use a custom languages.json', _.compose(JSON.&parse, fs.&readFileSync))
+        .option('-l, --layout [name]',    'choose a layout (parallel, linear or classic)', c.layout)
+        .option('-o, --output [path]',    'output to a given folder', c.output)
+        .option('-c, --css [file]',       'use a custom css file', c.css)
+        .option('-t, --template [file]',  'use a custom .jst template', c.template)
+        .option('-e, --extension [ext]',  'assume a file extension for all inputs', c.extension)
+        .option('-m, --marked [file]',    'use custom marked options', c.marked)
+        .parse(args)
+      if (commander.args.length) {
+        document commander
+      } else {
+        commander.usage()
+      }
+    }
+
+    def args
+  
+    Docco(Map context) {
+      commander._ = _
+      fs.path     = path
+      fs.tasks    = context.tasks
+      args        = context.args
+      languages   = buildMatchers languages
+    }
+  }
 
   @CompileStatic
   class ECMAScript {
@@ -683,266 +943,6 @@ class DoccoMain extends Script {
     }
   
     def _
-  }
-  
-  @Log
-  class Docco {
-    def __dirname = new File("").getAbsolutePath()
-    def _ = new Underscore()
-    def JSON = new Json()
-    def fs   = new FS()
-    def path = new Path()
-    def highlightjs = new HighlightJS()
-    def marked = new CommonMark()
-    def commander = new Commander()
-  
-    def document(options = [:], k = null) {
-      def config = configure options
-  
-      fs.mkdirs(config.output) { ->
-  
-        k ?= { error -> if (error) throw error }
-        def copyAsset = { file, k0 ->
-  	if (!fs.existsSync(file)) return k0()
-          fs.copy file, path.join(config.output, path.basename(file)), k0
-        }
-        def complete  = { ->
-          copyAsset(config.css) { error ->
-            if (error) return k(error)
-            if (fs.existsSync(config.public)) return copyAsset(config.public, k)
-            k()
-          }
-        }
-  
-        def files = config.sources.collect()
-  
-        def nextFile
-       	if (true) nextFile = { ->
-          def source = files.pop()
-          fs.readFile(source) { error, buffer ->
-            if (error) return k(error)
-
-            def code = buffer.toString().replaceAll('\r\n', '\n')
-            def sections = parse source, code, config
-            format source, sections, config
-            write source, sections, config
-            files.size() ? nextFile() : complete()
-          }
-        }
-  
-        if (files.size()) nextFile()
-      }
-    }
-  
-    def parse(source, code, config = [:]) {
-      def lines    = code.split "\n"
-      def sections = []
-      def lang     = getLanguage source, config
-      def hasCode  = '', docsText = '', codeText = ''
-  
-      def save = { ->
-        sections.add([docsText: docsText, codeText: codeText])
-        hasCode = docsText = codeText = ''
-      }
-  
-      if (lang.literate) {
-        def isText = true, maybeCode = true
-        def match
-        for (def line in lines) {
-          switch (true) {
-            case maybeCode && (match = line =~ /^([ ]{4}|[ ]{0,3}\t)/):
-              isText  = false
-              hasCode = true
-              codeText += line.substring(match[0][1].size()) + '\n'
-              break
-            case maybeCode = line ==~ /^\s*$/:
-              isText ? (docsText += '\n') : (codeText += '\n')
-              break
-            default:
-              isText = true
-              if (hasCode) save()
-              docsText += line + '\n'
-              if (line ==~ /^(---+|===+)$/) save()
-          }
-        }
-      } else {
-        for (def line in lines) {
-          switch (true) {
-            case line =~ lang.commentMatcher && !(line =~ lang.commentFilter):
-              if (hasCode) save()
-              docsText += (line = line.replaceFirst(lang.commentMatcher, '')) + '  \n'
-              if (line ==~ /^(---+|===+)$/) save()
-              break
-            default:
-              hasCode = true
-              codeText += line + '\n'
-          }
-        }
-      }
-      save()
-  
-      sections
-    }
-  
-    def format(source, sections, config) {
-      def language      = getLanguage source, config
-      def markedOptions = [smartypants: true]
-  
-      if (config.marked) {
-        markedOptions = config.marked
-      }
-  
-      marked.setOptions markedOptions
-      marked.setOptions([
-        highlight: { code, lang ->
-          lang ?= language.name
-    
-          if (highlightjs.getLanguage(lang)) {
-            highlightjs.highlight(code, [language: lang]).value
-          } else {
-            log.info "docco: couldn't highlight code block with unknown language '#{lang}' in #{source}"
-            code
-          }
-        }
-      ])
-  
-      for (def section in sections) {
-        def code
-        code = highlightjs.highlight(section.codeText, [language: language.name]).value
-        code = code.replaceFirst(/\s+$/, '')
-        section.codeHtml = "<div class='highlight'><pre>${code}</pre></div>"
-        section.docsHtml = marked.apply(section.docsText)
-      }
-    }
-
-    def write(source, sections, config) {
-      def first
-  
-      def destination = { file ->
-        path.join(config.output, path.dirname(file), path.basename(file, path.extname(file)) + '.html')
-      }
-  
-      def relative = { file ->
-        def to = path.dirname(path.resolve(file))
-        def from = path.dirname(path.resolve(destination(source)))
-        path.join(path.relative(from, to), path.basename(file))
-      }
-  
-      def firstSection = _.find sections, { section ->
-        section.docsText.size() > 0
-      }
-      if (firstSection) first = marked.lexer(firstSection.docsText).firstChild
-      def hasTitle = first && "$first.class" == "class org.commonmark.node.Heading" && first.level == 1
-      def title = hasTitle ? first.firstChild.literal : path.basename(source)
-      def css = relative path.join(config.output, path.basename(config.css))
-  
-      def html = config.template([
-        sources: config.sources, css: css, title: title, hasTitle: hasTitle,
-        sections: sections, path: path, destination: destination, relative: relative
-      ])
-  
-      println "docco: ${source} -> ${destination source}"
-      fs.outputFileSync destination(source), html
-    }
-  
-    def defaults = [
-      layout:     'parallel',
-      output:     'docs',
-      template:   null,
-      css:        null,
-      extension:  null,
-      languages:  [:],
-      marked:     null
-    ]
-  
-    def configure(options) {
-      def config = _.extend([:], defaults, _.pick(options.opts(), _.keys(defaults)))
-  
-      config.languages = buildMatchers config.languages
-  
-      if (options.template) {
-        if (!options.css) {
-          log.info "docco: no stylesheet file specified"
-        }
-        config.layout = null
-      } else {
-        def dir = config.layout = path.join __dirname, 'resources', config.layout
-        if (fs.existsSync(path.join dir, 'public')) {
-          config.public         = path.join dir, 'public'
-        } 
-        config.template         = path.join dir, 'docco.jst'
-        config.css              = options.css ?: path.join(dir, 'docco.css')
-      }
-      config.template = _.template fs.readFileSync(config.template)
-  
-      if (options.marked) {
-        config.marked = JSON.parse fs.readFileSync(options.marked)
-      }
-  
-      config.sources = options.args.filter({ source ->
-        def lang = getLanguage source, config
-        if (!lang) {
-          log.info "docco: skipped unknown type (${path.basename source})"
-        }
-        lang
-      }).sort()
-
-      config
-    }
-  
-    def languages = JSON.parse fs.readFileSync(path.join(__dirname, 'resources', 'languages.json'))
-  
-    def buildMatchers(languages) {
-      languages.each { ext, l ->
-        l.commentMatcher = ~/^\s*${l.symbol}\s?/
-        l.commentFilter = $/(^#![/]|^\s*#\${'{'})/$
-      }
-      languages
-    }
-  
-    def getLanguage(source, config) {
-      def ext  = config.extension ?: path.extname(source) ?: path.basename(source)
-      def lang = config.languages?[ext] ?: languages[ext]
-      if (lang && lang.name == 'markdown') {
-        def codeExt  = path.extname(path.basename(source, ext))
-        def codeLang = config.languages?[codeExt] ?: languages[codeExt]
-        if (codeExt && codeLang) {
-          lang = _.extend([:], codeLang, [literate: true])
-        }
-      }
-      lang
-    }
-  
-    def version = JSON.parse(fs.readFileSync(path.join(__dirname, 'package.json'))).version
-  
-    def run(args = args) {
-      def c = defaults
-      commander.version(version)
-        .usage('groovy docco.groovy [options] files')
-        .option('-L, --languages [file]', 'use a custom languages.json', _.compose(JSON.&parse, fs.&readFileSync))
-        .option('-l, --layout [name]',    'choose a layout (parallel, linear or classic)', c.layout)
-        .option('-o, --output [path]',    'output to a given folder', c.output)
-        .option('-c, --css [file]',       'use a custom css file', c.css)
-        .option('-t, --template [file]',  'use a custom .jst template', c.template)
-        .option('-e, --extension [ext]',  'assume a file extension for all inputs', c.extension)
-        .option('-m, --marked [file]',    'use custom marked options', c.marked)
-        .parse(args)
-      if (commander.args.length) {
-        document commander
-      } else {
-        commander.usage()
-      }
-    }
-
-    def args
-  
-    Docco(Map context) {
-      commander._ = _
-      fs.path     = path
-      fs.tasks    = context.tasks
-      args        = context.args
-      languages   = buildMatchers languages
-    }
   }
 
   DoccoMain(Binding context) {
