@@ -779,11 +779,11 @@ Coffeescript
       }
       
 
-Set Property
-------------
+JavaObjectMethods
+-----------------
 
       @CompileStatic
-      class Utils {
+      class JavaObjectMethods {
         static void setProperty(Class clazz, obj, String property, value) {
           def field = clazz.getDeclaredField(property)
           field.setAccessible(true)
@@ -970,7 +970,7 @@ Add support for coffeescript code highlighting
             Highlighter.mLanguageMap,
             new CoffeescriptLanguage().build()
           )
-          Utils.setProperty(
+          JavaObjectMethods.setProperty(
             Highlighter,
             null,
             "mLanguages",

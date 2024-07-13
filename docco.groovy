@@ -624,7 +624,7 @@ class DoccoMain extends Script {
   }
   
   @CompileStatic
-  class Utils {
+  class JavaObjectMethods {
     static void setProperty(Class clazz, obj, String property, value) {
       def field = clazz.getDeclaredField(property)
       field.setAccessible(true)
@@ -792,7 +792,7 @@ class DoccoMain extends Script {
         Highlighter.mLanguageMap,
         new CoffeescriptLanguage().build()
       )
-      Utils.setProperty(
+      JavaObjectMethods.setProperty(
         Highlighter,
         null,
         "mLanguages",
