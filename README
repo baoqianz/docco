@@ -1,4 +1,4 @@
-Groovy porting of the Docco
+Groovy porting of Docco
 ======
 
  ____
@@ -17,7 +17,7 @@ http://ashkenas.com/docco/
 
 Prerequisites:
 
-  It requires Java and Groovy are installed
+  Make sure Java and Groovy are installed
 
     Java 11 and later
 
@@ -29,7 +29,7 @@ Prerequisites:
 
 Installation:
 
-  Download the release (executable bundle) from github and unzip it
+  Download the Docco release and unzip it
 
     https://github.com/baoqianz/docco/releases/download/0.9.1/release.zip
 
